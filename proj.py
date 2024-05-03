@@ -207,5 +207,5 @@ class Transformations:
                 u1992 = self.fl21992(np.deg2rad(dane[:,0]), np.deg2rad(dane[:,1]))
                 np.savetxt(f"WYNIK_{f}.txt", u1992, delimiter=":")
                 
-                
-if __name__ == "__main__":
+
+    
