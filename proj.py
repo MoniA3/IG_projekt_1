@@ -25,9 +25,9 @@ class Transformations:
         elif model == "GRS80":
             self.a = 6378137.0
             self.b = 6356752.31414036
-     #  elif model == "KRASOWSKI":
-         #  self.a = 6378245.0
-         #  self.b = 6356863.019
+        elif model == "KRASOWSKI":
+            self.a = 6378245.0
+            self.b = 6356863.019
         else:
             raise NotImplementedError(f"Program nie obsługuje podanej elipsoidy")
         self.f = (self.a - self.b) / self.a  
