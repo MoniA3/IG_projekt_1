@@ -7,6 +7,7 @@ Created on Mon Apr 22 17:06:41 2024
 
 from math import *
 import numpy as np
+from argparse import ArgumentParser
 
 
 class Transformations:
@@ -51,8 +52,8 @@ class Transformations:
         
         """Tranformacja współrzędnych geocentrycznych XYZ na współrzędne elipsoidalne fi, lambda, h"""
         
-        def XYZ2FLH(self, X,Y,Z):   #Algorytm Hirvonena
-            result = []
+        def XYZ2flh(self, X,Y,Z):   #Algorytm Hirvonena
+            flh = []
             for X, Y, Z in zip(X,Y,Z):
                 r = np.sqrt(X**2 + Y**2) #promień
                 f = np.arctan(Z / (r * (1-self.e2)))
@@ -67,8 +68,57 @@ class Transformations:
                 N = self.Np(f)
                 h = (p/np.cos(f)) - N
                 result.append([np.rad2deg(f), np.rad2deg(l), h])
-            return result  
+            return flh
         
+        
+        """Transformacja współrzędnych elipsoidalnych fi, lambda, h na współrzędne geocentryczne XYZ"""
+        
+        def flh2XYZ(self, fi, lam, h):
+            XYZ = []
+            for fi, lam, h in zip(fi, lam, h):
+                while True:
+                    N = self.Np(fi)
+                    X = (N + h) * np.cos(fi) * np.cos(lam)
+                    Xp = X
+                    Y = (N + h) * np.cos(fi) * np.sin(lam)
+                    Z = (N * (1 - self.e2) + h) * np.sin(fi)
+                    if abs(Xp - X) < (0.000001/206265):
+                        break
+                XYZ.append([X, Y, Z])
+            return(XYZ)
+        
+        
+        """Tranformacja współrzędnych geocentryczny do współrzędnych topocentrycznych"""
+        
+        def Rneu(self, fi, lam):
+            R = np.array([[-np.sin(fi)*np.cos(lam), -np.sin(lam), np.cos(fi)*np.cos(lam)],
+                          [-np.sin(fi)*np.sin(lam), np.cos(lam), np.cos(fi)*np.sin(lam)],
+                          [np.cos(fi), 0., np.sin(fi)]])
+            return(R)
+        
+
+        def XYZ2NEU(self, X, Y, Z, X0, Y0, Z0):
+            result = []
+            r = np.sqrt(X0**2+Y0**2)
+            f = np.arctan(Z0/(r*(1-self.e2)))
+            while True:
+                N = self.Np(f)
+                h = (r/np.cos(f))-N
+                fp = f
+                f = np.arctan(Z0/(r*(1-self.e2*N/(N+h))))
+                if abs(fp-f)<(0.000001/206265):
+                    break
+            l = np.arctan2(Y0,X0)
+            N = self.Np(f)
+            h = r / cos(f) - N
+            
+            R_neu = self.Rneu(fi, lam)
+            for X, Y, Z in zip(X, Y, Z):
+                X_sr = [X-X0, Y-Y0, Z-Z0] 
+                X_rneu = R_neu.T @ X_sr
+                result.append(X_rneu.T)
+                
+            return result
         
         
         
