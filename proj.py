@@ -25,11 +25,11 @@ class Transformations:
         elif model == "GRS80":
             self.a = 6378137.0
             self.b = 6356752.31414036
-        elif model == "KRASOWSKI":
-            self.a = 6378245.0
-            self.b = 6356863.019
+     #  elif model == "KRASOWSKI":
+         #  self.a = 6378245.0
+         #  self.b = 6356863.019
         else:
-            raise NotImplementedError(f"Program nie obsługuje tej elipsoidy")
+            raise NotImplementedError(f"Program nie obsługuje podanej elipsoidy")
         self.f = (self.a - self.b) / self.a  
         self.e = sqrt(2 * self.f - self.f ** 2) 
         self.e2 = (2 * self.f - self.f ** 2)
@@ -180,6 +180,6 @@ class Transformations:
                             
                 X1992 = XGK * m0 - 5300000
                 Y1992 = YGK * m0 + 500000
-                wsp.append([x92, y92]) 
+                wsp.append([X1992, Y1992]) 
                 
             return(wsp1992)
