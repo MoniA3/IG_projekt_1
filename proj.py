@@ -16,7 +16,7 @@ class Transformations:
         Parametry elipsoid:
             a - duża półoś elipsoidy
             b - mała półoś elipsoidy 
-            flat - biegunowe spłaszczenie elipsoidy
+            f - biegunowe spłaszczenie elipsoidy
             e2 - mimośród^2
         """
         if model == "WGS84":
@@ -30,9 +30,9 @@ class Transformations:
             self.b = 6356863.019
         else:
             raise NotImplementedError(f"Program nie obsługuje tej elipsoidy")
-        self.flat = (self.a - self.b) / self.a  
-        self.e = sqrt(2 * self.flat - self.flat ** 2) 
-        self.e2 = (2 * self.flat - self.flat ** 2)
+        self.f = (self.a - self.b) / self.a  
+        self.e = sqrt(2 * self.f - self.f ** 2) 
+        self.e2 = (2 * self.f - self.f ** 2)
         
         """Fukcje, które są niezbędne do transformacji"""
         
@@ -56,15 +56,15 @@ class Transformations:
             flh = []
             for X, Y, Z in zip(X,Y,Z):
                 r = np.sqrt(X**2 + Y**2) #promień
-                f = np.arctan(Z / (r * (1-self.e2)))
+                fi = np.arctan(Z / (r * (1-self.e2)))
                 while True:
-                    N = self.Np(f)
-                    h = (r/np.cos(f)) - N
-                    fp = f
-                    f = np.arctan(Z / (r * (1-self.e2*N/(N + h))))
+                    N = self.Np(fi)
+                    h = (r/np.cos(fi)) - N
+                    fp = fi
+                    fi = np.arctan(Z / (r * (1-self.e2 * N/(N + h))))
                     if abs(fp-f)<(0.000001/206265):
                         break
-                l = np.arctan2(Y,X)
+                l = np.arctan2(Y, X)
                 N = self.Np(f)
                 h = (p/np.cos(f)) - N
                 result.append([np.rad2deg(f), np.rad2deg(l), h])
@@ -88,12 +88,12 @@ class Transformations:
             return(XYZ)
         
         
-        """Tranformacja współrzędnych geocentryczny do współrzędnych topocentrycznych"""
+        """Tranformacja współrzędnych geocentrycznych do współrzędnych topocentrycznych"""
         
         def Rneu(self, fi, lam):
             R = np.array([[-np.sin(fi)*np.cos(lam), -np.sin(lam), np.cos(fi)*np.cos(lam)],
                           [-np.sin(fi)*np.sin(lam), np.cos(lam), np.cos(fi)*np.sin(lam)],
-                          [np.cos(fi), 0., np.sin(fi)]])
+                          [np.cos(fi), 0, np.sin(fi)]])
             return(R)
         
 
