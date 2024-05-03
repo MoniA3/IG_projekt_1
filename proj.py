@@ -186,26 +186,26 @@ class Transformations:
 
         """wczytywanie danych oraz funckcji z pliku """
         def wczytywanie(self, plik, f):
-            data = np.genfromtxt(plik,  delimiter = " ")
+            dane = np.genfromtxt(plik,  delimiter = " ")
             if f =="""XYZ2flh""":
                 #dane (x,y,z)
                 flh = self.XYZ2flh(dane[:,0], dane[:,1], dane[:,2])
-                np.savetxt(f"Wynik_{f}.txt", flh, delimiter=":")
-            if f =="""flh2XYZ""":
+                np.savetxt(f"Wynik_{f}.txt", flh, delimiter=";")
+            elif f =="""flh2XYZ""":
                 #dane (f, l,h ) 
                 xyz = self.flh2XYZ(np.deg2rad((dane[:,0])), np.deg2rad(dane[:,1]), dane[:,2])
-                np.savetxt(f"Wynik_{f}.txt", xyz, delimiter=":")
-            if f =="""XYZ2NEU""":
+                np.savetxt(f"Wynik_{f}.txt", xyz, delimiter=";")
+            elif f =="""XYZ2NEU""":
                 #dane ( x,y, z, x0,y0,z0)
                 neu = self.XYZ2NEU(dane[1:,0], dane[1:,1], dane[1:,2], dane[0,0], dane[0,1], dane[0,2])
-                np.savetxt(f"WYNIK_{f}.txt", neu, delimiter=":")
-            if f =="""fl22000""":
+                np.savetxt(f"WYNIK_{f}.txt", neu, delimiter=";")
+            elif f =="""fl22000""":
                 #dane (f,l)
                 u2000 = self.fl22000(np.deg2rad(dane[:,0]), np.deg2rad(dane[:,1]))
-                np.savetxt(f"WYNIK_{f}.txt", u2000, delimiter=":")
-            if f =="""fl21992""":
+                np.savetxt(f"WYNIK_{f}.txt", u2000, delimiter=";")
+            elif f =="""fl21992""":
                 #dane (f,l)
                 u1992 = self.fl21992(np.deg2rad(dane[:,0]), np.deg2rad(dane[:,1]))
-                np.savetxt(f"WYNIK_{f}.txt", u1992, delimiter=":")
+                np.savetxt(f"WYNIK_{f}.txt", u1992, delimiter=";")
                 
 
