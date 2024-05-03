@@ -121,5 +121,65 @@ class Transformations:
             return wynik
         
         
+        """Tranformacja współrzędnych elipsoidalnych fi, lambda do współrzędnych w układzie 2000"""
+          
+        def GK2000(self, fi, lam):
+            m0 = 0.999923
+            wsp2000 = []
+            for fi, lam in zip(fi,lam):
+                lam0 = 0 
+                strefa = 0
+                if lam > np.deg2rad(13.5) and lam < np.deg2rad(16.5):
+                    strefa = 5
+                    lam0 = np.deg2rad(15)
+                elif lam > np.deg2rad(16.5) and lam < np.deg2rad(19.5):
+                    strefa = 6
+                    lam0 = np.deg2rad(18)
+                elif lam > np.deg2rad(19.5) and lam < np.deg2rad(22.5):
+                    strefa =7
+                    lam0 = np.deg2rad(21)
+                elif lam > np.deg2rad(22.5) and lam < np.deg2rad(25.5):
+                    strefa = 8
+                    lam0 = np.deg2rad(24)
+                else:
+                    print("Punkt poza strefami odwzorowawczymi układu PL-2000")        
+                         
+                e2prim = (self.a**2 - self.b**2) / self.b**2   #drugi mimosrod elipsy
+                dlam = lam - lam0
+                t = np.tan(fi)
+                n = np.sqrt(e2prim * (np.cos(fi))**2)
+                N = self.Np(fi)
+                sigma = self.Sigma(fi)
+            
+                XGK = sigma + ((dlam**2)/2) * N * np.sin(fi)*np.cos(fi) * ( 1+ ((dlam**2)/12)*(np.cos(fi))**2 * ( 5 - (t**2)+9*(n**2) + 4*(n**4)     )  + ((dlam**4)/360)*(np.cos(fi)**4) * (61-58*(t**2)+(t**4) + 270*(n**2) - 330*(n**2)*(t**2))  )
+                YGK = (dlam*N* np.cos(fi)) * (1+(((dlam)**2/6)*(np.cos(fi))**2) *(1-(t**2)+(n**2))+((dlam**4)/120)*(np.cos(fi)**4)*(5-18*(t**2)+(t**4)+14*(n**2)-58*(n**2)*(t**2)) )
+                         
+                X2000 = xgk * m0
+                Y2000 = ygk * m0 + strefa*1000000 + 500000
+                wsp.append([X2000, Y2000])
+                
+            return(wsp2000) 
         
         
+        """Tranformacja współrzędnych fi, lambda do współrzędnych w układzie 1992"""
+        
+        def GK1992(self, fi, lam):
+            lam0 = (19 * np.pi)/180
+            m0 = 0.9993
+            wsp1992 = []
+            for fi,lam in zip(fi,lam):
+                e2prim = (self.a**2 - self.b**2) / self.b**2   #drugi mimosrod elipsy
+                dlam = lam - lam0
+                t = np.tan(fi)
+                n = np.sqrt(e2prim * (np.cos(fi))**2)
+                N = self.Np(fi)
+                sigma = self.Sigma(fi)
+                
+                XGK = sigma + ((dlam**2)/2)*N*np.sin(fi)*np.cos(fi) * ( 1+ ((dlam**2)/12)*(np.cos(fi))**2 * ( 5 - (t**2)+9*(n**2) + 4*(n**4) ) + ((dlam**4)/360)*(np.cos(fi)**4) * (61-58*(t**2)+(t**4) + 270*(n**2) - 330*(n**2)*(t**2))  )
+                YGK = (dlam*N* np.cos(fi)) * (1+(((dlam)**2/6)*(np.cos(fi))**2) *(1-(t**2)+(n**2))+((dlam**4)/120)*(np.cos(fi)**4)*(5-18*(t**2)+(t**4)+14*(n**2)-58*(n**2)*(t**2)) )
+                            
+                X1992 = XGK * m0 - 5300000
+                Y1992 = YGK * m0 + 500000
+                wsp.append([x92, y92]) 
+                
+            return(wsp1992)
