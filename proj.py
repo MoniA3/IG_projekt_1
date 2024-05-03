@@ -123,7 +123,7 @@ class Transformations:
         
         """Tranformacja współrzędnych elipsoidalnych fi, lambda do współrzędnych w układzie 2000"""
           
-        def GK2000(self, fi, lam):
+        def fl22000(self, fi, lam):
             m0 = 0.999923
             wsp2000 = []
             for fi, lam in zip(fi,lam):
@@ -163,7 +163,7 @@ class Transformations:
         
         """Tranformacja współrzędnych fi, lambda do współrzędnych w układzie 1992"""
         
-        def GK1992(self, fi, lam):
+        def fl21992(self, fi, lam):
             lam0 = (19 * np.pi)/180
             m0 = 0.9993
             wsp1992 = []
@@ -183,4 +183,29 @@ class Transformations:
                 wsp.append([X1992, Y1992]) 
                 
             return(wsp1992)
-        
+
+        """wczytywanie danych oraz funckcji z pliku """
+        def wczytywanie(self, plik, f):
+            data = np.genfromtxt(plik,  delimiter = " ")
+            if f =="""XYZ2flh""":
+                #dane (x,y,z)
+                flh = self.XYZ2flh(dane[:,0], dane[:,1], dane[:,2])
+                np.savetxt(f"Wynik_{f}.txt", flh, delimiter=":")
+            if f =="""flh2XYZ""":
+                #dane (f, l,h ) 
+                xyz = self.flh2XYZ(np.deg2rad((dane[:,0])), np.deg2rad(dane[:,1]), dane[:,2])
+                np.savetxt(f"Wynik_{f}.txt", xyz, delimiter=":")
+            if f =="""XYZ2NEU""":
+                #dane ( x,y, z, x0,y0,z0)
+                neu = self.XYZ2NEU(dane[1:,0], dane[1:,1], dane[1:,2], dane[0,0], dane[0,1], dane[0,2])
+                np.savetxt(f"WYNIK_{f}.txt", neu, delimiter=":")
+            if f =="""fl22000""":
+                #dane (f,l)
+                u2000 = self.fl22000(np.deg2rad(dane[:,0]), np.deg2rad(dane[:,1]))
+                np.savetxt(f"WYNIK_{f}.txt", u2000, delimiter=":")
+            if f =="""fl21992""":
+                #dane (f,l)
+                u1992 = self.fl21992(np.deg2rad(dane[:,0]), np.deg2rad(dane[:,1]))
+                np.savetxt(f"WYNIK_{f}.txt", u1992, delimiter=":")
+                
+
