@@ -98,7 +98,7 @@ class Transformations:
         
 
         def XYZ2NEU(self, X, Y, Z, X0, Y0, Z0):
-            result = []
+            wynik = []
             r = np.sqrt(X0**2+Y0**2)
             f = np.arctan(Z0/(r*(1-self.e2)))
             while True:
@@ -118,7 +118,7 @@ class Transformations:
                 X_rneu = R_neu.T @ X_sr
                 result.append(X_rneu.T)
                 
-            return result
+            return wynik
         
         
         
