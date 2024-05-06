@@ -8,10 +8,14 @@ Wymagania techniczne aby program działał poprawnie:
 
 Transformacje zawarte w projekcie:
  
--"XYZ ===> FLH".
--FLH ===> XYZ.
--XYZ ===> NEU.
--FL ===> PL1992.
+-"XYZ ===> FLH"
+
+-FLH ===> XYZ
+
+-XYZ ===> NEU
+
+-FL ===> PL1992
+
 -FL ===> PL2000
 
 Transformacje dostępne są na elipsoidach:
