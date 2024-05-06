@@ -1,13 +1,13 @@
 Projekt 1 - informatyka geodezyjna 2 
 
 Wymagania techniczne aby program działał poprawnie 
-'''sh
+'''
 system operacyjny Windows 10 lub Windows 11
 python 3.11.5
 biblioteka numpy oraz biblioteka argparse
 ''''
 Transformacje zawarte w projekcie 
-'''sh
+'''
 XYZ ===> FLH
 FLH ===> XYZ
 XYZ ===> NEU
