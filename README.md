@@ -8,7 +8,7 @@ Wymagania techniczne aby program działał poprawnie:
 
 Transformacje zawarte w projekcie:
 
--XYZ ===> FLH
+-"XYZ ===> FLH"
 -FLH ===> XYZ
 -XYZ ===> NEU
 -FL ===> PL1992
