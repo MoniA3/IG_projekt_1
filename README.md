@@ -7,13 +7,13 @@ Wymagania techniczne aby program działał poprawnie:
 -biblioteka numpy oraz biblioteka argparse
 
 Transformacje zawarte w projekcie:
- '''
--"XYZ ===> FLH"
--FLH ===> XYZ
--XYZ ===> NEU
--FL ===> PL1992
+ 
+-"XYZ ===> FLH".
+-FLH ===> XYZ.
+-XYZ ===> NEU.
+-FL ===> PL1992.
 -FL ===> PL2000
-'''
+
 Transformacje dostępne są na elipsoidach:
 
 -GRS80
