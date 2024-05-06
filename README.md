@@ -1,7 +1,7 @@
-#Projekt 1 - informatyka geodezyjna 2 
+Projekt 1 - informatyka geodezyjna 2 
 
-##Wymagania techniczne aby program działał poprawnie 
-''''
+Wymagania techniczne aby program działał poprawnie 
+'''sh
 'system operacyjny Windows 10 lub Windows 11'
 'python 3.11.5'
 'biblioteka numpy oraz biblioteka argparse'
