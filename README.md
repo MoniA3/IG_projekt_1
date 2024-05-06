@@ -7,7 +7,7 @@ Wymagania techniczne aby program działał poprawnie:
 -biblioteka numpy oraz biblioteka argparse
 
 Transformacje zawarte w projekcie:
-
+ 
 -"XYZ ===> FLH"
 -FLH ===> XYZ
 -XYZ ===> NEU
