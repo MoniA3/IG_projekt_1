@@ -10,7 +10,7 @@ import numpy as np
 from argparse import ArgumentParser
 
 
-class Transformations:
+class Transformacje:
     def __init__(self, model: str = "WGS84"):
         """
         Parametry elipsoid:
@@ -25,9 +25,9 @@ class Transformations:
         elif model == "GRS80":
             self.a = 6378137.0
             self.b = 6356752.31414036
-     #  elif model == "KRASOWSKI":
-         #  self.a = 6378245.0
-         #  self.b = 6356863.019
+        elif model == "KRASOWSKI":
+            self.a = 6378245.0
+            self.b = 6356863.019
         else:
             raise NotImplementedError(f"Program nie obsługuje podanej elipsoidy")
         self.f = (self.a - self.b) / self.a  
@@ -90,29 +90,27 @@ class Transformations:
         
         """Tranformacja współrzędnych geocentrycznych do współrzędnych topocentrycznych"""
         
-        def Rneu(self, fi, lam):
-            R = np.array([[-np.sin(fi)*np.cos(lam), -np.sin(lam), np.cos(fi)*np.cos(lam)],
-                          [-np.sin(fi)*np.sin(lam), np.cos(lam), np.cos(fi)*np.sin(lam)],
-                          [np.cos(fi), 0, np.sin(fi)]])
-            return(R)
-        
 
         def XYZ2NEU(self, X, Y, Z, X0, Y0, Z0):
             wynik = []
+            fi, lam, _ = [radians(coord) for coord in self.XYZ2flh(X0, Y0, Z0)]
+            R_neu = np.array([[-np.sin(fi)*np.cos(lam), -np.sin(lam), np.cos(fi)*np.cos(lam)],
+                              [-np.sin(fi)*np.sin(lam), np.cos(lam), np.cos(fi)*np.sin(lam)],
+                              [np.cos(fi), 0, np.sin(fi)]])
             r = np.sqrt(X0**2+Y0**2)
             f = np.arctan(Z0/(r*(1-self.e2)))
             while True:
                 N = self.Np(f)
                 h = (r/np.cos(f))-N
                 fp = f
-                f = np.arctan(Z0/(r*(1-self.e2*N/(N+h))))
+                f = np.arctan(Z0/(r*(1-self.e2 * N/(N+h))))
                 if abs(fp-f)<(0.000001/206265):
                     break
             l = np.arctan2(Y0,X0)
             N = self.Np(f)
             h = r / cos(f) - N
             
-            R_neu = self.Rneu(fi, lam)
+            #R_neu = self.Rneu(fi, lam)
             for X, Y, Z in zip(X, Y, Z):
                 X_sr = [X-X0, Y-Y0, Z-Z0] 
                 X_rneu = R_neu.T @ X_sr
@@ -185,8 +183,17 @@ class Transformations:
             return(wsp1992)
 
         """wczytywanie danych oraz funckcji z pliku """
+        
         def wczytywanie(self, plik, f):
-            dane = np.genfromtxt(plik,  delimiter = " ")
+            with open(plik) as dane:
+                lines = dane.readlines()
+                lines = lines[naglowek:]
+                for line in lines:
+                    line = line.strip()
+                    _,_,_ = line.split(',')
+                    
+            #dane = np.genfromtxt(plik,  delimiter = ",")
+                
             if f =="""XYZ2flh""":
                 #dane (x,y,z)
                 flh = self.XYZ2flh(dane[:,0], dane[:,1], dane[:,2])
@@ -208,4 +215,31 @@ class Transformations:
                 u1992 = self.fl21992(np.deg2rad(dane[:,0]), np.deg2rad(dane[:,1]))
                 np.savetxt(f"WYNIK_{f}.txt", u1992, delimiter=";")
                 
-
+                
+if __name__ == '__main__':
+    parser = ArgumentParser()
+    parser.add_argument('-dane', type=str, help='Wpisz nazwę wraz z rozszerzeniem pliku z danymi wejsciowymi')
+    parser.add_argument('-model', type=str, help='Wybierz elipsoide sposrod dostepnych: WRS84, GRS80, KRASOWSKI')
+    parser.add_argument('-transformacje', type=str, help='Wybierz transformacje, z ktorej chcesz skorzystac, sposrod dostepnych: XYZ2flh, flh2XYZ, XYZ2neu, GK2000, GK1992, XYZ2NEU')
+    parser.add_argument('-naglowek', type=int, help='Wpisz ile linijek nagłówka w pliku z danymi należy pominąć')
+    args = parser.parse_args()
+    model = {'WGS84': [6378137.000, 0.00669438002290], 'GRS80': [6378137.000, 0.00669438002290], 'KRASOWSKI': [6378245.000, 0.00669342162296]}
+    transformacje = {'XYZ2flh': 'XYZ2flh', 'flh2XYZ': 'flh2XYZ','XYZ2NEU': 'XYZ2NEU', 'fl22000': 'fl22000', 'fl21992': 'fl21992'}
+    
+    
+    try:
+        wsp = Transformacje(model[args.model])
+        koniec = wsp.wczytywanie(args.dane, args.transformacje.upper())
+        print("Utworzono plik ze wspolrzednymi.")
+    except AttributeError as e:
+        print("Error:", e)    
+    except FileNotFoundError:
+        print("Nie znaleziono podanego pliku")
+    except KeyError:
+        print("Niepoprawna nazwa Elipsoidy lub Transformacji")
+    except IndexError:
+        print("Dane w podanym pliku sa w nieodpowiednim formacie")
+    except ValueError:
+        print("Dane w podanym pliku są w nieodpowiednim formacie. Prosimy wprowadzic dane w formacie jak podano w przykładzie")
+    finally:
+        print("Dziękujemy za użycie naszego programu:)")
