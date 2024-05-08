@@ -241,14 +241,14 @@ if __name__ == '__main__':
             if args.dane==None:
                 args.dane = input(str('Wklej sciezke do pliku txt z danymi: '))
             if args.transformacja==None:
-                args.transformacja = input(str('Jaka transformacje wykonac?: '))
+                args.transformacja = input(str('Podaj nazwę tranformacji, którą chcesz wykonać: '))
                 
                 obiekt = Transformacje(model[args.el.upper()])
                 dane = obiekt.odczyt(args.dane, transformacje[args.t.upper()])
             
-            print('Plik wynikowy zostal utworzony.')
+            print('Plik z wynikami zostal utworzony.')
             
-            wybor = input(str("Jezeli chcesz wykonac kolejna transformacje wpisz TAK jesli chcesz zakonczyc ENTER: ")).upper()
+            wybor = input(str("Jezeli chcesz wykonac kolejna transformacje wpisz TAK jesli chcesz zakonczyc KONIEC: ")).upper()
             args.model = None
             args.dane= None
             args.transformacja= None
