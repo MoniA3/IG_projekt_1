@@ -28,8 +28,8 @@ class Transformacje:
         elif model == "KRASOWSKI":
             self.a = 6378245.0
             self.b = 6356863.019
-        else:
-            raise NotImplementedError(f"Program nie obsługuje podanej elipsoidy")
+        # else:
+        #     raise NotImplementedError(f"Program nie obsługuje podanej elipsoidy")
         self.f = (self.a - self.b) / self.a  
         self.e = sqrt(2 * self.f - self.f ** 2) 
         self.e2 = (2 * self.f - self.f ** 2)
@@ -216,23 +216,6 @@ if __name__ == '__main__':
     transformacje = {'XYZ2flh': 'XYZ2flh', 'flh2XYZ': 'flh2XYZ','XYZ2NEU': 'XYZ2NEU', 'fl22000': 'fl22000', 'fl21992': 'fl21992'}
     
     wybor='TAK'
-    # try:
-    #     wsp = Transformacje(model[args.model])
-    #     koniec = wsp.wczytywanie(args.plik, args.transformacje.upper())
-    #     print("Utworzono plik ze wspolrzednymi.")
-    # except AttributeError as e:
-    #     print("Error:", e)    
-    # except FileNotFoundError:
-    #     print("Nie znaleziono podanego pliku")
-    # except KeyError:
-    #     print("Niepoprawna nazwa Elipsoidy lub Transformacji")
-    # except IndexError:
-    #     print("Dane w podanym pliku sa w nieodpowiednim formacie")
-    # except ValueError:
-    #     print("Dane w podanym pliku są w nieodpowiednim formacie. Prosimy wprowadzic dane w formacie jak podano w przykładzie")
-    # finally:
-    #     print("Dziękujemy za użycie naszego programu:)")
-
 
     try:
         while wybor =="TAK":
@@ -243,8 +226,8 @@ if __name__ == '__main__':
             if args.transformacja==None:
                 args.transformacja = input(str('Podaj nazwę tranformacji, którą chcesz wykonać: '))
                 
-                obiekt = Transformacje(model[args.el.upper()])
-                dane = obiekt.odczyt(args.dane, transformacje[args.t.upper()])
+                obiekt = Transformacje(model[args.model.upper()])
+                wyniki = obiekt.wczytywanie(args.dane, Transformacje[args.transformacja.upper()])
             
             print('Plik z wynikami zostal utworzony.')
             
