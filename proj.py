@@ -146,7 +146,7 @@ class Transformacje:
         for X, Y, Z in zip(X, Y, Z):
             X_sr = [X-X0, Y-Y0, Z-Z0] 
             X_rneu = R_neu.T @ X_sr
-            result.append(X_rneu.T)
+            wynik.append(X_rneu.T)
             
         return wynik
         
@@ -200,7 +200,7 @@ class Transformacje:
                          
             X2000 = xgk * m0
             Y2000 = ygk * m0 + strefa*1000000 + 500000
-            wsp.append([X2000, Y2000])
+            wsp2000.append([X2000, Y2000])
                 
         return(wsp2000) 
         
@@ -237,7 +237,7 @@ class Transformacje:
                             
             X1992 = XGK * m0 - 5300000
             Y1992 = YGK * m0 + 500000
-            wsp.append([X1992, Y1992]) 
+            wsp1992.append([X1992, Y1992]) 
                 
         return(wsp1992)
 
@@ -287,8 +287,8 @@ if __name__ == '__main__':
                 args.transformacja = input(str('Podaj nazwę tranformacji, którą chcesz wykonać: '))
             if args.naglowek==None:
                 args.model = input(str('Podaj ile linijek nagłówka chcesz pominać:  '))
-            wsp = Transformacje(model[args.model])
-            wczyt = wsp.plik(args.dane, transf[args.transf.upper()])
+            wsp = Transformacje(model[args.model.upper()])
+            wczyt = wsp.plik(args.dane,args.transf.upper())
             print('Plik z wynikami zostal utworzony.')
             
             wybor = input(str("Jezeli chcesz wykonac kolejna transformacje wpisz TAK jesli chcesz zakonczyc KONIEC: ")).upper()
