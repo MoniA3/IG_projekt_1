@@ -32,7 +32,11 @@ Transformacje dostępne są na elipsoidach:
 
 
 Opis działania programu:
-1. program przyjmuje z pliku dane do transformacji, elipsoide odniesienia oraz jaką transformacje chcemy wykonać
-2. po wyborze powyższych wartości i załadowaniu pliku z danymi do transformacji utworzy się plik tekstowy który będzie zawierał wyniki wykonanych transformacji, a na konsoli powienien pjawić się komunikat który mówi że plik zapisano
-3. plik będzie posiadał nazwę WYNIK_{funckja}.txt  -{funkcja} jest to funkcja którą chceliśmy wkonać
+1. program przyjmuje kolejno
+   - dane z pliku dane do transformacji
+   - elipsoide odniesienia
+   - jaką transformacje chcemy wykonać
+   - liczbę linijek nagłówka które chcemy pominąć
+3. po wyborze powyższych wartości i załadowaniu pliku z danymi do transformacji utworzy się plik tekstowy który będzie zawierał wyniki wykonanych transformacji, a na konsoli powienien pjawić się komunikat który mówi że plik zapisano
+4. plik będzie posiadał nazwę WYNIK_{funckja}.txt  -{funkcja} jest to funkcja którą chceliśmy wkonać
  
