@@ -15,24 +15,19 @@ class Transformacje:
         """
         Parametry elipsoid:
             a - duża półoś elipsoidy
-            b - mała półoś elipsoidy 
-            f - biegunowe spłaszczenie elipsoidy
             e2 - mimośród^2
         """
         if model == "WGS84":
             self.a = 6378137.0 
-            self.b = 6356752.31424518
+            self.e2 = 0.00669437999014
         elif model == "GRS80":
             self.a = 6378137.0
-            self.b = 6356752.31414036
+            self.e2 = 0.0066943800229
         elif model == "KRASOWSKI":
             self.a = 6378245.0
-            self.b = 6356863.019
-        # else:
-        #     raise NotImplementedError(f"Program nie obsługuje podanej elipsoidy")
-        self.f = (self.a - self.b) / self.a  
-        self.e = sqrt(2 * self.f - self.f ** 2) 
-        self.e2 = (2 * self.f - self.f ** 2)
+            self.e2 =  0.00669342162296
+       # else:
+           # raise NotImplementedError(f"Program nie obsługuje podanej elipsoidy")
         
     """Fukcje, które są niezbędne do transformacji"""
         
@@ -53,6 +48,19 @@ class Transformacje:
     """Tranformacja współrzędnych geocentrycznych XYZ na współrzędne elipsoidalne fi, lambda, h"""
         
     def XYZ2flh(self, X, Y, Z):   # Algorytm Hirvonena
+       """
+       Parametry
+       ----------
+       współrzedne geocentryczne punktu [m]
+       X Y Z 
+       
+       Wynik
+       -------
+       współrzędne elipsoidalne punktu
+       fi : szerokosć geodezyjna punktu [rad]
+       lam : długosć geodezyjna punktu [rad]
+       h : wysokosć punktu [m]
+       """
        flh = []
        for x, y, z in zip(X, Y, Z):
            r = np.sqrt(x**2 + y**2)  # promień
@@ -72,6 +80,19 @@ class Transformacje:
     """Transformacja współrzędnych elipsoidalnych fi, lambda, h na współrzędne geocentryczne XYZ"""
         
     def flh2XYZ(self, fi, lam, h):
+        """
+        Parametry
+        ----------
+        współrzędne elipsoidalne punktu
+        fi : szerokosć geodezyjna punktu [rad]
+        lam : długosć geodezyjna punktu [rad]
+        h : wysokosć punktu [m]
+        
+        Wynik
+        -------
+        współrzedne geocentryczne punktu [m]
+        X Y Z
+        """
         XYZ = []
         for fi, lam, h in zip(fi, lam, h):
             while True:
@@ -90,6 +111,19 @@ class Transformacje:
         
 
     def XYZ2NEU(self, X, Y, Z, X0, Y0, Z0):
+        """
+        Parametry
+        ----------
+        współrzedne geocentryczne satelitów [m]
+            X Y Z 
+        wsporedne geocentryczne anteny [m]
+            X0 Y0 Z0
+        Wynik
+        -------
+        Współrzędne geodezyjne w układzie topocentrycznym [m]
+        X Y Z
+        
+        """
         wynik = []
         fi, lam, _ = [radians(coord) for coord in self.XYZ2flh(X0, Y0, Z0)]
         R_neu = np.array([[-np.sin(fi)*np.cos(lam), -np.sin(lam), np.cos(fi)*np.cos(lam)],
@@ -120,6 +154,19 @@ class Transformacje:
     """Tranformacja współrzędnych elipsoidalnych fi, lambda do współrzędnych w układzie 2000"""
           
     def fl22000(self, fi, lam):
+        """
+        Parametry
+        ----------
+        współrzędne elipsoidalne punktu
+        fi : szerokosć geodezyjna punktu [rad]
+        lam : długosć geodezyjna punktu [rad]
+        h : wysokosć punktu [m]
+        
+        Wynik
+        -------
+        współrzedne geocentryczne punktu w układzie PL-2000 [m]
+        X Y 
+        """
         m0 = 0.999923
         wsp2000 = []
         for fi, lam in zip(fi,lam):
@@ -161,6 +208,19 @@ class Transformacje:
     """Tranformacja współrzędnych fi, lambda do współrzędnych w układzie 1992"""
         
     def fl21992(self, fi, lam):
+        """
+        Parametry
+        ----------
+        współrzędne elipsoidalne punktu
+        fi : szerokosć geodezyjna punktu [rad]
+        lam : długosć geodezyjna punktu [rad]
+        h : wysokosć punktu [m]
+        
+        Wynik
+        -------
+        współrzedne geocentryczne punktu w układzie PL-1992 [m]
+        X Y 
+        """
         lam0 = (19 * np.pi)/180
         m0 = 0.9993
         wsp1992 = []
@@ -225,10 +285,10 @@ if __name__ == '__main__':
                 args.dane = input(str('Wklej sciezke do pliku txt z danymi: '))
             if args.transformacja==None:
                 args.transformacja = input(str('Podaj nazwę tranformacji, którą chcesz wykonać: '))
-                
-                obiekt = Transformacje(model[args.model.upper()])
-                wyniki = obiekt.wczytywanie(args.dane, Transformacje[args.transformacja.upper()])
-            
+            if args.naglowek==None:
+                args.model = input(str('Podaj ile linijek nagłówka chcesz pominać:  '))
+            wsp = Transformacje(model[args.model])
+            wczyt = wsp.plik(args.dane, transf[args.transf.upper()])
             print('Plik z wynikami zostal utworzony.')
             
             wybor = input(str("Jezeli chcesz wykonac kolejna transformacje wpisz TAK jesli chcesz zakonczyc KONIEC: ")).upper()
