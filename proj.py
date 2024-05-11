@@ -281,7 +281,7 @@ class Transformacje:
             l = lists["l"]
             h = lists["h"]
             xyz = self.flh2XYZ(np.deg2rad(f,l,h))
-            np.savetxt(f"Wynik_{transformacja}_args.model.txt", flh, delimiter=";")
+            np.savetxt(f"Wynik_{transformacja}_args.model.txt", xyz, delimiter=";")
         elif transformacja == "XYZ2NEU":
             X = lists["X"]
             Y = lists["Y"]
@@ -290,17 +290,17 @@ class Transformacje:
             Y0 = lists["Y0"]
             Z0 = lists["Z0"]
             neu = self.XYZ2NEU(X,Y,Z,X0,Y0,Z0)
-            np.savetxt(f"Wynik_{transformacja}_args.model.txt", flh, delimiter=";")
+            np.savetxt(f"Wynik_{transformacja}_args.model.txt", neu, delimiter=";")
         elif transformacja == "fl22000":
             f = lists["f"]
             l = lists["l"]
             u2000 = self.fl22000(np.deg2rad(f), np.deg2rad(l))
-            np.savetxt(f"Wynik_{transformacja}_args.model.txt", flh, delimiter=";")
+            np.savetxt(f"Wynik_{transformacja}_args.model.txt", u2000, delimiter=";")
         elif transformacja == "fl21992":
             f = lists["f"]
             l = lists["l"]
             u1992 = self.fl21992(np.deg2rad(f), np.deg2rad(l))
-            np.savetxt(f"Wynik_{transformacja}_args.model.txt", flh, delimiter=";")
+            np.savetxt(f"Wynik_{transformacja}_args.model.txt", u1992, delimiter=";")
                 
 if __name__ == '__main__':
     parser = ArgumentParser()
