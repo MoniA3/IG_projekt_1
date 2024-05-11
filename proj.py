@@ -186,7 +186,8 @@ class Transformacje:
                 print("Punkt poza strefami odwzorowawczymi układu PL-2000")
                 continue
                          
-            e2prim = (self.a**2 - self.b**2) / self.b**2   #drugi mimosrod elipsy
+            b2 = self.a**2*(1-self.e2)    
+            ep2 = (self.a**2-b2)/b2   #drugi mimosrod elipsy
             dlam = lam - lam0
             t = np.tan(fi)
             n = np.sqrt(e2prim * (np.cos(fi))**2)
