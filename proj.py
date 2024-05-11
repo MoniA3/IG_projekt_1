@@ -272,7 +272,7 @@ if __name__ == '__main__':
     parser.add_argument('-transformacja', type=str, help='Wybierz transformacje, z ktorej chcesz skorzystac, sposrod dostepnych: XYZ2flh, flh2XYZ, XYZ2neu, GK2000, GK1992, XYZ2NEU')
     parser.add_argument('-naglowek', type=int, help='Wpisz ile linijek nagłówka w pliku z danymi należy pominąć')
     args = parser.parse_args()
-    model = {'WGS84': [6378137.000, 6356752.31424518], 'GRS80': [6378137.000, 6356752.31414036], 'KRASOWSKI': [6378245.000, 6356863.019]}
+    model = {'WGS84': [6378137.000, 0.00669437999014], 'GRS80': [6378137.000, 0.0066943800229], 'KRASOWSKI': [6378245.000, 0.00669342162296]}
     transformacja = {'XYZ2flh': 'XYZ2flh', 'flh2XYZ': 'flh2XYZ','XYZ2NEU': 'XYZ2NEU', 'fl22000': 'fl22000', 'fl21992': 'fl21992'}
     
     wybor='TAK'
@@ -286,12 +286,12 @@ if __name__ == '__main__':
             if args.transformacja==None:
                 args.transformacja = input(str('Podaj nazwę tranformacji, którą chcesz wykonać: '))
             if args.naglowek==None:
-                args.naglowek = input(str('Podaj ile linijek nagłówka chcesz pominać:  '))
+                args.naglowek = input(str('Podaj ile linijek nagłówka chcesz pominąć:  '))
             wsp = Transformacje(model[args.model.upper()])
-            wczyt = wsp.wczytywanie(args.dane,args.transformacja.upper(), args.naglowek)
+            wczyt = wsp.wczytywanie(args.dane, args.transformacja.upper(), args.naglowek)
             print('Plik z wynikami zostal utworzony.')
             
-            wybor = input(str("Jezeli chcesz wykonac kolejna transformacje wpisz TAK jesli chcesz zakonczyc KONIEC: ")).upper()
+            wybor = input(str("Jeżeli chcesz wykonac kolejną transformacje wpisz TAK, jesli chcesz zakonczyc wpisz KONIEC: ")).upper()
             args.model = None
             args.dane= None
             args.transformacja= None
@@ -299,10 +299,10 @@ if __name__ == '__main__':
     except FileNotFoundError:
         print('Podany plik nie istnieje.')
     except KeyError:
-        print('Zle podana elipsoida lub transformacja.')
+        print('Niepoprawna nazwa elipsoidy lub transformacji.')
     except IndexError:
-        print('Zly format danych w pliku.')
+        print('Zły format danych w pliku.')
     except ValueError:
-        print('Zly format danych w pliku.')
+        print('Zły format danych w pliku.')
     finally:
-        print('Koniec programu')
+        print('Koniec programu.')
