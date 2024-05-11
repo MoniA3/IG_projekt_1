@@ -286,9 +286,9 @@ if __name__ == '__main__':
             if args.transformacja==None:
                 args.transformacja = input(str('Podaj nazwę tranformacji, którą chcesz wykonać: '))
             if args.naglowek==None:
-                args.model = input(str('Podaj ile linijek nagłówka chcesz pominać:  '))
+                args.naglowek = input(str('Podaj ile linijek nagłówka chcesz pominać:  '))
             wsp = Transformacje(model[args.model.upper()])
-            wczyt = wsp.plik(args.dane,args.transf.upper())
+            wczyt = wsp.wczytywanie(args.dane,args.transformacja.upper(), args.naglowek)
             print('Plik z wynikami zostal utworzony.')
             
             wybor = input(str("Jezeli chcesz wykonac kolejna transformacje wpisz TAK jesli chcesz zakonczyc KONIEC: ")).upper()
