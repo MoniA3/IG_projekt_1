@@ -261,12 +261,28 @@ class Transformacje:
                     lists["Y"].append(float(parts[1]))
                     lists["Z"].append(float(parts[2]))
             else:
-                lists = {"X": [], "Y": [], "Z": []}
-                for line in lines:
-                    parts = line.strip().split(',')
-                    lists["X"].append(float(parts[0]))
-                    lists["Y"].append(float(parts[1]))
-                    lists["Z"].append(float(parts[2]))
+                if transformacja == 'fl22000' or transformacja == 'fl21992':
+                    lists = {"f": [], "l": []}
+                    for line in lines:
+                        parts = line.strip().split(',')
+                        lists["f"].append(float(parts[0]))
+                        lists["l"].append(float(parts[1]))
+                        
+                elif transformacja == 'XYZ2flh':
+                    lists = {"X": [], "Y": [], "Z": []}
+                    for line in lines:
+                        parts = line.strip().split(',')
+                        lists["X"].append(float(parts[0]))
+                        lists["Y"].append(float(parts[1]))
+                        lists["Z"].append(float(parts[2]))
+                        
+                elif transformacja == 'flh2XYZ':
+                    lists = {"f": [], "l": [], "h": []}
+                    for line in lines:
+                        parts = line.strip().split(',')
+                        lists["f"].append(float(parts[0]))
+                        lists["l"].append(float(parts[1]))
+                        lists["h"].append(float(parts[2]))
             print("Przetworzone dane:", lists)   
             
         if transformacja == "XYZ2flh":
