@@ -243,8 +243,6 @@ class Transformacje:
     """wczytywanie danych oraz funckcji z pliku """
         
     def wczytywanie(self, plik, transformacja, naglowek):
-        print("Próba otwarcia pliku:", plik)
-        print("Linie nagłówka do pominięcia:", naglowek)
         with open(plik, 'r') as file:
             lines = file.readlines()
             lines = lines[naglowek:]
@@ -262,12 +260,28 @@ class Transformacje:
                     lists["Y"].append(float(parts[1]))
                     lists["Z"].append(float(parts[2]))
             else:
-                lists = {"X": [], "Y": [], "Z": []}
-                for line in lines:
-                    parts = line.strip().split(',')
-                    lists["X"].append(float(parts[0]))
-                    lists["Y"].append(float(parts[1]))
-                    lists["Z"].append(float(parts[2]))
+                if transformacja == 'fl22000' or transformacja == 'fl21992':
+                    lists = {"f": [], "l": []}
+                    for line in lines:
+                        parts = line.strip().split(',')
+                        lists["f"].append(float(parts[0]))
+                        lists["l"].append(float(parts[1]))
+                        
+                elif transformacja == 'XYZ2flh':
+                    lists = {"X": [], "Y": [], "Z": []}
+                    for line in lines:
+                        parts = line.strip().split(',')
+                        lists["X"].append(float(parts[0]))
+                        lists["Y"].append(float(parts[1]))
+                        lists["Z"].append(float(parts[2]))
+                        
+                elif transformacja == 'flh2XYZ':
+                    lists = {"f": [], "l": [], "h": []}
+                    for line in lines:
+                        parts = line.strip().split(',')
+                        lists["f"].append(float(parts[0]))
+                        lists["l"].append(float(parts[1]))
+                        lists["h"].append(float(parts[2]))
             print("Przetworzone dane:", lists)   
             
         if transformacja == "XYZ2flh":
@@ -331,12 +345,25 @@ if __name__ == '__main__':
             elif args.transformacja not in transf.keys():
                 print("Nieprawidłowa nazwa transformacji. Wybierz spośród: XYZ2flh, flh2XYZ, XYZ2NEU, fl22000, fl21992")
             else:
-                t = Transformacje(args.model)
+                t = Transformacje(elipsoidy[args.model.upper()])
                 t.wczytywanie(args.dane, args.transformacja, args.naglowek)
                 wybor = input("Czy chcesz spróbować jeszcze raz? TAK/NIE: ")
                 args.model= None
                 args.dane= None
                 args.transformacja= None
                 args.naglowek= None
+                
     except FileNotFoundError:
         print("Plik nie został znaleziony. Upewnij się, że podałeś poprawną nazwę i ścieżkę do pliku.")
+    except FileNotFoundError:
+        print('Podany plik nie istnieje.')
+    except KeyError:
+        print('Niepoprawna nazwa elipsoidy lub transformacji.')
+    except IndexError:
+        print('Zły format danych w pliku.')
+    except ValueError:
+        print('Zły format danych w pliku.')
+    finally:
+        print('Dziękujemy za skorzystanie z naszego programu.')
+        
+    
