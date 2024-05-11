@@ -190,7 +190,7 @@ class Transformacje:
             ep2 = (self.a**2-b2)/b2   #drugi mimosrod elipsy
             dlam = lam - lam0
             t = np.tan(fi)
-            n = np.sqrt(e2prim * (np.cos(fi))**2)
+            n = np.sqrt(ep2 * (np.cos(fi))**2)
             N = self.Np(fi)
             sigma = self.Sigma(fi)
             
@@ -224,10 +224,11 @@ class Transformacje:
         m0 = 0.9993
         wsp1992 = []
         for fi,lam in zip(fi,lam):
-            e2prim = (self.a**2 - self.b**2) / self.b**2   #drugi mimosrod elipsy
+            b2 = self.a**2*(1-self.e2)    
+            ep2 = (self.a**2-b2)/b2   #drugi mimosrod elipsy
             dlam = lam - lam0
             t = np.tan(fi)
-            n = np.sqrt(e2prim * (np.cos(fi))**2)
+            n = np.sqrt(ep2 * (np.cos(fi))**2)
             N = self.Np(fi)
             sigma = self.Sigma(fi)
                 
