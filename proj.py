@@ -186,10 +186,11 @@ class Transformacje:
                 print("Punkt poza strefami odwzorowawczymi układu PL-2000")
                 continue
                          
-            e2prim = (self.a**2 - self.b**2) / self.b**2   #drugi mimosrod elipsy
+            b2 = self.a**2*(1-self.e2)    
+            ep2 = (self.a**2-b2)/b2   #drugi mimosrod elipsy   #drugi mimosrod elipsy
             dlam = lam - lam0
             t = np.tan(fi)
-            n = np.sqrt(e2prim * (np.cos(fi))**2)
+            n = np.sqrt(ep2 * (np.cos(fi))**2)
             N = self.Np(fi)
             sigma = self.Sigma(fi)
             
@@ -223,10 +224,11 @@ class Transformacje:
         m0 = 0.9993
         wsp1992 = []
         for fi,lam in zip(fi,lam):
-            e2prim = (self.a**2 - self.b**2) / self.b**2   #drugi mimosrod elipsy
+            b2 = self.a**2*(1-self.e2)    
+            ep2 = (self.a**2-b2)/b2   #drugi mimosrod elipsy   #drugi mimosrod elipsy
             dlam = lam - lam0
             t = np.tan(fi)
-            n = np.sqrt(e2prim * (np.cos(fi))**2)
+            n = np.sqrt(ep2 * (np.cos(fi))**2)
             N = self.Np(fi)
             sigma = self.Sigma(fi)
                 
@@ -310,12 +312,12 @@ class Transformacje:
             f = lists["f"]
             l = lists["l"]
             u2000 = self.fl22000(np.deg2rad(f), np.deg2rad(l))
-            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", u2000, delimiter=";", fmt='%0.3f %0.3f %0.3f')
+            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", u2000, delimiter=";", fmt='%0.3f %0.3f')
         elif transformacja == "fl21992":
             f = lists["f"]
             l = lists["l"]
             u1992 = self.fl21992(np.deg2rad(f), np.deg2rad(l))
-            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", u1992, delimiter=";", fmt='%0.3f %0.3f %0.3f')
+            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", u1992, delimiter=";", fmt='%0.3f %0.3f')
                 
 if __name__ == '__main__':
     parser = ArgumentParser()
