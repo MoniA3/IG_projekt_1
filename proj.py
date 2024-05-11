@@ -11,7 +11,7 @@ from argparse import ArgumentParser
 
 
 class Transformacje:
-    def __init__(self, model: str = "WGS84"):
+    def __init__(self, model):
         """
         Parametry elipsoid:
             a - duża półoś elipsoidy
@@ -26,8 +26,8 @@ class Transformacje:
         elif model == "KRASOWSKI":
             self.a = 6378245.0
             self.e2 =  0.00669342162296
-       # else:
-           # raise NotImplementedError(f"Program nie obsługuje podanej elipsoidy")
+        else:
+            raise NotImplementedError(f"Program nie obsługuje podanej elipsoidy")
         
     """Fukcje, które są niezbędne do transformacji"""
         
@@ -244,24 +244,20 @@ class Transformacje:
     """wczytywanie danych oraz funckcji z pliku """
         
     def wczytywanie(self, plik, transformacja, naglowek):
+        dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
         if transformacja == "XYZ2flh":
-            dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
             flh = self.XYZ2flh(dane[:, 0], dane[:, 1], dane[:, 2])
             np.savetxt(f"Wynik_{transformacja}.txt", flh, delimiter=";")
         elif transformacja == "flh2XYZ":
-            dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
             xyz = self.flh2XYZ(np.deg2rad(dane[:, 0]), np.deg2rad(dane[:, 1]), dane[:, 2])
             np.savetxt(f"Wynik_{transformacja}.txt", xyz, delimiter=";")
         elif transformacja == "XYZ2NEU":
-            dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
             neu = self.XYZ2NEU(dane[1:, 0], dane[1:, 1], dane[1:, 2], dane[0, 0], dane[0, 1], dane[0, 2])
             np.savetxt(f"WYNIK_{transformacja}.txt", neu, delimiter=";")
         elif transformacja == "fl22000":
-            dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
             u2000 = self.fl22000(np.deg2rad(dane[:, 0]), np.deg2rad(dane[:, 1]))
             np.savetxt(f"WYNIK_{transformacja}.txt", u2000, delimiter=";")
         elif transformacja == "fl21992":
-            dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
             u1992 = self.fl21992(np.deg2rad(dane[:, 0]), np.deg2rad(dane[:, 1]))
             np.savetxt(f"WYNIK_{transformacja}.txt", u1992, delimiter=";")
                 
@@ -290,15 +286,18 @@ if __name__ == '__main__':
                 args.naglowek = input(str('Podaj ile linijek nagłówka chcesz pominąć:  '))
                 
             wsp = Transformacje(elipsoidy[args.model.upper()])
-            wczyt = wsp.wczytywanie(args.dane, args.transformacja.upper(), args.naglowek)
-            
+            if wsp is None:
+                print("Niepoprawna nazwa elipsoidy.")
+                continue
+
+            wsp.wczytywanie(args.dane, args.transformacja.upper(), args.naglowek)
             print('Plik z wynikami został utworzony.')
             
-            wybor = input(str("Jeżeli chcesz wykonać kolejną transformacje wpisz TAK, jesli chcesz zakonczyć wpisz KONIEC: ")).upper()
+            wybor = input(str("Jeżeli chcesz wykonac kolejną transformacje wpisz TAK, jesli chcesz zakonczyc wpisz KONIEC: ")).upper()
             args.model = None
             args.dane= None
+            
             args.transformacja= None
-            args.naglowek= None
 
     except FileNotFoundError:
         print('Podany plik nie istnieje.')
