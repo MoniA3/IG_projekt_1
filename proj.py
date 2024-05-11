@@ -272,29 +272,33 @@ if __name__ == '__main__':
     parser.add_argument('-transformacja', type=str, help='Wybierz transformacje, z ktorej chcesz skorzystac, sposrod dostepnych: XYZ2flh, flh2XYZ, XYZ2neu, GK2000, GK1992, XYZ2NEU')
     parser.add_argument('-naglowek', type=int, help='Wpisz ile linijek nagłówka w pliku z danymi należy pominąć')
     args = parser.parse_args()
-    model = {'WGS84': [6378137.000, 0.00669437999014], 'GRS80': [6378137.000, 0.0066943800229], 'KRASOWSKI': [6378245.000, 0.00669342162296]}
-    transformacja = {'XYZ2flh': 'XYZ2flh', 'flh2XYZ': 'flh2XYZ','XYZ2NEU': 'XYZ2NEU', 'fl22000': 'fl22000', 'fl21992': 'fl21992'}
+    
+    elipsoidy = {'WGS84': [6378137.000, 0.00669437999014], 'GRS80': [6378137.000, 0.0066943800229], 'KRASOWSKI': [6378245.000, 0.00669342162296]}
+    transf = {'XYZ2flh': 'XYZ2flh', 'flh2XYZ': 'flh2XYZ','XYZ2NEU': 'XYZ2NEU', 'fl22000': 'fl22000', 'fl21992': 'fl21992'}
     
     wybor='TAK'
 
     try:
         while wybor =="TAK":
             if args.model==None:
-                args.model = input(str('Podaj nazwe elipsoidy: '))
+                args.model = input(str('Podaj nazwę elipsoidy: '))
             if args.dane==None:
-                args.dane = input(str('Wklej sciezke do pliku txt z danymi: '))
+                args.dane = input(str('Wklej scieżkę do pliku txt z danymi: '))
             if args.transformacja==None:
                 args.transformacja = input(str('Podaj nazwę tranformacji, którą chcesz wykonać: '))
             if args.naglowek==None:
                 args.naglowek = input(str('Podaj ile linijek nagłówka chcesz pominąć:  '))
-            wsp = Transformacje(model[args.model.upper()])
+                
+            wsp = Transformacje(elipsoidy[args.model.upper()])
             wczyt = wsp.wczytywanie(args.dane, args.transformacja.upper(), args.naglowek)
-            print('Plik z wynikami zostal utworzony.')
             
-            wybor = input(str("Jeżeli chcesz wykonac kolejną transformacje wpisz TAK, jesli chcesz zakonczyc wpisz KONIEC: ")).upper()
+            print('Plik z wynikami został utworzony.')
+            
+            wybor = input(str("Jeżeli chcesz wykonać kolejną transformacje wpisz TAK, jesli chcesz zakonczyć wpisz KONIEC: ")).upper()
             args.model = None
             args.dane= None
             args.transformacja= None
+            args.naglowek= None
 
     except FileNotFoundError:
         print('Podany plik nie istnieje.')
