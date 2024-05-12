@@ -107,7 +107,7 @@ class Transformacje:
         
         
     """Tranformacja współrzędnych geocentrycznych do współrzędnych topocentrycznych"""
-        
+     
 
     def XYZ2NEU(self, X, Y, Z, X0, Y0, Z0):
         """
@@ -123,31 +123,48 @@ class Transformacje:
         X Y Z
         
         """
-        wynik = []
-        fi, lam, _ = [radians(coord) for coord in self.XYZ2flh(X0, Y0, Z0)]
         R_neu = np.array([[-np.sin(fi)*np.cos(lam), -np.sin(lam), np.cos(fi)*np.cos(lam)],
                           [-np.sin(fi)*np.sin(lam), np.cos(lam), np.cos(fi)*np.sin(lam)],
                           [np.cos(fi), 0, np.sin(fi)]])
-        r = np.sqrt(X0**2+Y0**2)
-        f = np.arctan(Z0/(r*(1-self.e2)))
-        while True:
-            N = self.Np(f)
-            h = (r/np.cos(f))-N
-            fp = f
-            f = np.arctan(Z0/(r*(1-self.e2 * N/(N+h))))
-            if abs(fp-f)<(0.000001/206265):
-                break
-        l = np.arctan2(Y0,X0)
-        N = self.Np(f)
-        h = r / cos(f) - N
-            
+        wynik = []
+        for X0, Y0, Z0 in zip(X0, Y0, Z0):
+            lam = np.arctan2(Y0, X0)
+            fi = np.arctan(Z0 / (r * (1 - self.e2)))
+            r = np.sqrt(X0**2+Y0**2)
+        # fi, lam, _ = [radians(coord) for coord in self.XYZ2flh(X0, Y0, Z0)]
+
+    
+            while True:
+                N = self.Np(f)
+                h = (r/np.cos(f))-N
+                fp = fi
+                fi = np.arctan(Z0/(r*(1-self.e2 * N/(N+h))))
+                if abs(fp-f)<(0.000001/206265):
+                    break
+                
+        X_list = []
+        Y_list = []
+        Z_list = []
         for X, Y, Z in zip(X, Y, Z):
-            X_sr = [X-X0, Y-Y0, Z-Z0] 
-            X_rneu = R_neu.T @ X_sr
-            wynik.append(X_rneu.T)
-            
+            X_list.append(X)
+            Y_list.append(Y)
+            Z_list.append(Z)
+
+        X_list = array(X_list)
+        Y_list = array(Y_list)
+        Z_list = array(Z_list)
+
+        xyz = column_stack([reshape(X_list, (len(X_list), 1)), reshape(
+            Y_list, (len(Y_list), 1)), reshape(Z_list, (len(Z_list), 1))])
+
+        xyz0 = array([X0, Y0, Z0]).T
+
+        xyzt = xyz-xyz0
+
+        neu = R.T @ xyzt.T
+        wynik.append(neu.T)        
+
         return wynik
-        
         
     """Tranformacja współrzędnych elipsoidalnych fi, lambda do współrzędnych w układzie 2000"""
           
