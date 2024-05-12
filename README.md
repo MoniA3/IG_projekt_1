@@ -1,7 +1,7 @@
 Projekt 1 - informatyka geodezyjna 2 
 
 
-Wymagania techniczne aby program działał poprawnie:
+###Wymagania techniczne aby program działał poprawnie:
 
 -system operacyjny Windows 10 lub Windows 11
 
@@ -11,7 +11,7 @@ Wymagania techniczne aby program działał poprawnie:
 
 
 
-Transformacje zawarte w projekcie:
+###Transformacje zawarte w projekcie:
  
 -XYZ ===> FLH
 
@@ -24,7 +24,7 @@ Transformacje zawarte w projekcie:
 -FL ===> PL2000
 
 
-Transformacje dostępne są na elipsoidach:
+###Transformacje dostępne są na elipsoidach:
 
 -GRS80
 
@@ -33,7 +33,7 @@ Transformacje dostępne są na elipsoidach:
 -KRASOWSKIEGO
 
 
-Opis działania programu:
+###Opis działania programu:
 
 1. Program wymaga podania przez użytkownika danych, na podstawie kolejnych flag
 <<<<<<<
@@ -72,10 +72,11 @@ PRZYKŁADOWE WYWOŁANIE ZA POMOCĄ WIERSZA POLECEŃ
     NIE program zakończy pracę a użytkownik zobaczy komunikat: 
     "Dziękujemy za skorzystanie z naszego programu."
 
-OPIS PLIKU Z DANYMI WEJŚCIOWYMI I WYJŚCIOWYMI
+###OPIS PLIKU Z DANYMI WEJŚCIOWYMI I WYJŚCIOWYMI
 
 Przykładowy plik z danymi wejściowymi "dane_XYZ2flh.txt":
 
+```
 Współrzedne geocentryczny ECEF stacji pemanentnej GNSS
 Obserwatorium Astronomiczno-Geodezyjne w Józefosławiu
   X[m]         Y[m]        Z[m]
@@ -92,12 +93,14 @@ Obserwatorium Astronomiczno-Geodezyjne w Józefosławiu
 3664940.514,1409153.584,5009571.169
 3664940.515,1409153.595,5009571.169
 3664940.513,1409153.584,5009571.171
+```
 
 Ma on 4 linijki nagłówka, które można ominąc, gdy użytkownik wpisze "4" po fladze "Podaj ile linijek nagłówka pliku z danymi należy pominąć:"
 Jak widać dane są oddzielone przecinkami i tylko w takim formacie program je poprawnie pobierze.
 
 Przykładowy plik z danymi wyjściowymi "Wynik_XYZ2flh_GRS80.txt":
 
+```
 52.09727 21.03153 141.39866
 52.09727 21.03153 141.39982
 52.09727 21.03153 141.40335
@@ -110,6 +113,6 @@ Przykładowy plik z danymi wyjściowymi "Wynik_XYZ2flh_GRS80.txt":
 52.09727 21.03153 141.40458
 52.09727 21.03153 141.40758
 52.09727 21.03153 141.40558
-
+```
 Dane po tej transformacji wyglądają następująco: są oddzielone spacją odpowiednio w kolejności szerokość geodezyjna, długość geodezyjna (obie w stopniach) i wysokość (w metrach).
 
