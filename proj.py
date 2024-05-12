@@ -374,10 +374,7 @@ if __name__ == '__main__':
                 args.transformacja= None
                 args.naglowek= None
     except FileNotFoundError:
-<<<<<<< 
+
         print("Plik nie został znaleziony. Upewnij się, że podałeś poprawną nazwę i ścieżkę do pliku.")
-=======
-        print("Plik nie został znaleziony. Upewnij się, że podałeś poprawną nazwę i ścieżkę do pliku.")
+
         
-    
->>>>>>> 
