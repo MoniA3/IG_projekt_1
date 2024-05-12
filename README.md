@@ -1,7 +1,7 @@
 Projekt 1 - informatyka geodezyjna 2 
 
 
-###Wymagania techniczne aby program działał poprawnie:
+### Wymagania techniczne aby program działał poprawnie:
 
 -system operacyjny Windows 10 lub Windows 11
 
@@ -11,7 +11,7 @@ Projekt 1 - informatyka geodezyjna 2
 
 
 
-###Transformacje zawarte w projekcie:
+### Transformacje zawarte w projekcie:
  
 -XYZ ===> FLH
 
@@ -33,7 +33,7 @@ Projekt 1 - informatyka geodezyjna 2
 -KRASOWSKIEGO
 
 
-###Opis działania programu:
+### Opis działania programu:
 
 1. Program wymaga podania przez użytkownika danych, na podstawie kolejnych flag
 <<<<<<<
@@ -48,22 +48,23 @@ Projekt 1 - informatyka geodezyjna 2
   
 3. plik będzie posiadał nazwę WYNIK_{funckja}_{elipsoida}.txt  -{funkcja} jest to funkcja którą chceliśmy wkonać a -{elipsoida) jest to model elipsoidy, której użyliśmy do obliczeń. Plik zostanie utworzony w tym samym folderze, w którym znajduję się nasz program. Wyniki będą w 2 lub 3 kolumnach o wartościach po kolei jak mamy w nazwie transformacji
 
-PRZYKŁADOWE WYWOŁANIE ZA POMOCĄ WIERSZA POLECEŃ
+### PRZYKŁADOWE WYWOŁANIE ZA POMOCĄ WIERSZA POLECEŃ
+
 1. Użytkownik musi otworzyć terminal a następnie przejść w nim do folderu, w którym znajduję się program np.
    C:\User\asus\Desktop\program
 
 2. Aby uruchomić program należy wpisać: python proj.py a następnie nacisnąć ENTER
    
 3. Aby ułatwić użytkownikowi wpisanie po kolei odpowiednich flag, pojawią się polecenia co trzeba wpisać tak jak pokazano poniżej:
+```
+   -Podaj nazwę elipsoidy: GRS80
    
-   -Podaj nazwę elipsoidy:
+   -Wklej scieżkę do pliku txt z danymi: C:\Users\Asus\Documents\2 rok\IV sem\Infa II\plik_dane_XYZ2flh.txt
    
-   -Wklej scieżkę do pliku txt z danymi:
+   -Podaj nazwę tranformacji, której chcesz użyć: XYZ2flh
    
-   -Podaj nazwę tranformacji, której chcesz użyć:
-   
-   -Podaj ile linijek nagłówka pliku z danymi należy pominąć:
-
+   -Podaj ile linijek nagłówka pliku z danymi należy pominąć: 2
+```
  5. Po poprawnym wypisaniu flag pojawi się komunikat:
     -Plik z wynikami został utworzony
     oraz:
