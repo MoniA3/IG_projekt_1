@@ -57,11 +57,14 @@ PRZYKŁADOWE WYWOŁANIE ZA POMOCĄ WIERSZA POLECEŃ
 3. Aby ułatwić użytkownikowi wpisanie po kolei odpowiednich flag, pojawią się polecenia co trzeba wpisać tak jak pokazano poniżej:
    
    -Podaj nazwę elipsoidy:
+   
    -Wklej scieżkę do pliku txt z danymi:
+   
    -Podaj nazwę tranformacji, której chcesz użyć:
+   
    -Podaj ile linijek nagłówka pliku z danymi należy pominąć:
 
- 4. Po poprawnym wypisaniu flag pojawi się komunikat:
+ 5. Po poprawnym wypisaniu flag pojawi się komunikat:
     -Plik z wynikami został utworzony
     oraz:
     -Czy chcesz spróbować jeszcze raz? TAK/NIE:
