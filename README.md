@@ -41,7 +41,7 @@ Opis działania programu:
 - ścieżkę do pliku z danymi do transformacji (np. C:\Users\Asus\Documents\2 rok\IV sem\Infa II\plik_dane_flh2XYZ.txt)
   UWAGA! dane w pliku muszą być oddzielone od siebie przecinkami odpowiednio 
   w ilości kolumn 2 lub 3 w zależności ile współrzędnych mają naszej dane 
-- transformacje chcemy wykonać (XYZ2flh, flh2XYZ, fl22000, fl21992, XYZ2NEU)
+- transformacje, które chcemy wykonać (XYZ2flh, flh2XYZ, fl22000, fl21992, XYZ2NEU)
 - ilość linijek nagłówka z pliku z danymi, które chcemy pominąć (liczba całkowita)
 
 2. po wyborze powyższych wartości i załadowaniu pliku z danymi do transformacji utworzy się plik tekstowy który będzie zawierał wyniki wykonanych transformacji, a na konsoli powienien pjawić się komunikat który mówi że plik zapisano
