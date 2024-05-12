@@ -9,7 +9,6 @@ from math import *
 import numpy as np
 from argparse import ArgumentParser
 
-
 class Transformacje:
     def __init__(self, model: str = "WGS84"):
         """
@@ -108,7 +107,7 @@ class Transformacje:
         
         
     """Tranformacja współrzędnych geocentrycznych do współrzędnych topocentrycznych"""
-        
+     
 
     def XYZ2NEU(self, X, Y, Z, X0, Y0, Z0):
         """
@@ -124,32 +123,49 @@ class Transformacje:
         X Y Z
         
         """
+
         wynik = []
-        fi, lam, _ = [radians(coord) for coord in self.XYZ2flh(X0, Y0, Z0)]
+        for X0, Y0, Z0 in zip(X0, Y0, Z0):
+            lam = np.arctan2(Y0, X0)
+            r = np.sqrt(X0**2+Y0**2)
+            fi = np.arctan(Z0 / (r * (1 - self.e2)))
+
+            while True:
+                N = self.Np(fi)
+                h = (r/np.cos(fi))-N
+                fp = fi
+                fi = np.arctan(Z0/(r*(1-self.e2 * N/(N+h))))
+                if abs(fp-fi)<(0.000001/206265):
+                    break
+                
+            
         R_neu = np.array([[-np.sin(fi)*np.cos(lam), -np.sin(lam), np.cos(fi)*np.cos(lam)],
-                          [-np.sin(fi)*np.sin(lam), np.cos(lam), np.cos(fi)*np.sin(lam)],
-                          [np.cos(fi), 0, np.sin(fi)]])
-        r = np.sqrt(X0**2+Y0**2)
-        f = np.arctan(Z0/(r*(1-self.e2)))
-        while True:
-            N = self.Np(f)
-            h = (r/np.cos(f))-N
-            fp = f
-            f = np.arctan(Z0/(r*(1-self.e2 * N/(N+h))))
-            if abs(fp-f)<(0.000001/206265):
-                break
-        l = np.arctan2(Y0,X0)
-        N = self.Np(f)
-        h = r / cos(f) - N
-            
-        #R_neu = self.Rneu(fi, lam)
+                         [-np.sin(fi)*np.sin(lam), np.cos(lam), np.cos(fi)*np.sin(lam)],
+                         [np.cos(fi), 0, np.sin(fi)]])
+                
+        X_list = []
+        Y_list = []
+        Z_list = []
         for X, Y, Z in zip(X, Y, Z):
-            X_sr = [X-X0, Y-Y0, Z-Z0] 
-            X_rneu = R_neu.T @ X_sr
-            wynik.append(X_rneu.T)
-            
+            X_list.append(X)
+            Y_list.append(Y)
+            Z_list.append(Z)
+
+        X_list = np.array(X_list)
+        Y_list = np.array(Y_list)
+        Z_list = np.array(Z_list)
+
+        xyz = np.column_stack([np.reshape(X_list, (len(X_list), 1)), np.reshape(
+            Y_list, (len(Y_list), 1)), np.reshape(Z_list, (len(Z_list), 1))])
+
+        xyz0 = np.array([X0, Y0, Z0]).T
+
+        xyzt = xyz-xyz0
+
+        neu = R_neu.T @ xyzt.T
+        wynik.append(neu.T)        
+
         return wynik
-        
         
     """Tranformacja współrzędnych elipsoidalnych fi, lambda do współrzędnych w układzie 2000"""
           
@@ -188,18 +204,19 @@ class Transformacje:
                 print("Punkt poza strefami odwzorowawczymi układu PL-2000")
                 continue
                          
-            e2prim = (self.a**2 - self.b**2) / self.b**2   #drugi mimosrod elipsy
+            b2 = self.a**2*(1-self.e2)    
+            ep2 = (self.a**2-b2)/b2   #drugi mimosrod elipsy   #drugi mimosrod elipsy
             dlam = lam - lam0
             t = np.tan(fi)
-            n = np.sqrt(e2prim * (np.cos(fi))**2)
+            n = np.sqrt(ep2 * (np.cos(fi))**2)
             N = self.Np(fi)
             sigma = self.Sigma(fi)
             
             XGK = sigma + ((dlam**2)/2) * N * np.sin(fi)*np.cos(fi) * ( 1+ ((dlam**2)/12)*(np.cos(fi))**2 * ( 5 - (t**2)+9*(n**2) + 4*(n**4)     )  + ((dlam**4)/360)*(np.cos(fi)**4) * (61-58*(t**2)+(t**4) + 270*(n**2) - 330*(n**2)*(t**2))  )
             YGK = (dlam*N* np.cos(fi)) * (1+(((dlam)**2/6)*(np.cos(fi))**2) *(1-(t**2)+(n**2))+((dlam**4)/120)*(np.cos(fi)**4)*(5-18*(t**2)+(t**4)+14*(n**2)-58*(n**2)*(t**2)) )
                          
-            X2000 = xgk * m0
-            Y2000 = ygk * m0 + strefa*1000000 + 500000
+            X2000 = XGK * m0
+            Y2000 = YGK * m0 + strefa*1000000 + 500000
             wsp2000.append([X2000, Y2000])
                 
         return(wsp2000) 
@@ -225,10 +242,11 @@ class Transformacje:
         m0 = 0.9993
         wsp1992 = []
         for fi,lam in zip(fi,lam):
-            e2prim = (self.a**2 - self.b**2) / self.b**2   #drugi mimosrod elipsy
+            b2 = self.a**2*(1-self.e2)    
+            ep2 = (self.a**2-b2)/b2   #drugi mimosrod elipsy   #drugi mimosrod elipsy
             dlam = lam - lam0
             t = np.tan(fi)
-            n = np.sqrt(e2prim * (np.cos(fi))**2)
+            n = np.sqrt(ep2 * (np.cos(fi))**2)
             N = self.Np(fi)
             sigma = self.Sigma(fi)
                 
@@ -244,26 +262,80 @@ class Transformacje:
     """wczytywanie danych oraz funckcji z pliku """
         
     def wczytywanie(self, plik, transformacja, naglowek):
+        print("Próba otwarcia pliku:", plik)
+        print("Linie nagłówka do pominięcia:", naglowek)
+        with open(plik, 'r') as file:
+            lines = file.readlines()
+            lines = lines[naglowek:]
+            if transformacja == 'XYZ2NEU':
+                lists = {"X": [], "Y": [], "Z": [],
+                         "X0": [], "Y0": [], "Z0": []}
+                parts = lines[0].strip().split(',')
+                lists["X0"].append(float(parts[0]))
+                lists["Y0"].append(float(parts[1]))
+                lists["Z0"].append(float(parts[2]))
+                
+                for line in lines[1:]:
+                    parts = line.strip().split(',')
+                    lists["X"].append(float(parts[0]))
+                    lists["Y"].append(float(parts[1]))
+                    lists["Z"].append(float(parts[2]))
+            else:
+                if transformacja == 'fl22000' or transformacja == 'fl21992':
+                    lists = {"f": [], "l": []}
+                    for line in lines:
+                        parts = line.strip().split(',')
+                        lists["f"].append(float(parts[0]))
+                        lists["l"].append(float(parts[1]))
+                        
+                elif transformacja == 'XYZ2flh':
+                    lists = {"X": [], "Y": [], "Z": []}
+                    for line in lines:
+                        parts = line.strip().split(',')
+                        lists["X"].append(float(parts[0]))
+                        lists["Y"].append(float(parts[1]))
+                        lists["Z"].append(float(parts[2]))
+                        
+                elif transformacja == 'flh2XYZ':
+                    lists = {"f": [], "l": [], "h": []}
+                    for line in lines:
+                        parts = line.strip().split(',')
+                        lists["f"].append(float(parts[0]))
+                        lists["l"].append(float(parts[1]))
+                        lists["h"].append(float(parts[2]))
+            print("Przetworzone dane:", lists)   
+            
         if transformacja == "XYZ2flh":
-            dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
-            flh = self.XYZ2flh(dane[:, 0], dane[:, 1], dane[:, 2])
-            np.savetxt(f"Wynik_{transformacja}.txt", flh, delimiter=";")
+            X = lists["X"]
+            Y = lists["Y"]
+            Z = lists["Z"]
+            flh = self.XYZ2flh(X,Y,Z)
+            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", flh, delimiter=";", fmt='%0.3f %0.3f %0.3f')
         elif transformacja == "flh2XYZ":
-            dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
-            xyz = self.flh2XYZ(np.deg2rad(dane[:, 0]), np.deg2rad(dane[:, 1]), dane[:, 2])
-            np.savetxt(f"Wynik_{transformacja}.txt", xyz, delimiter=";")
+            f = lists["f"]
+            l = lists["l"]
+            h = lists["h"]
+            xyz = self.flh2XYZ(np.deg2rad(f), np.deg2rad(l),h)
+            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", xyz, delimiter=";", fmt='%0.3f %0.3f %0.3f')
         elif transformacja == "XYZ2NEU":
-            dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
-            neu = self.XYZ2NEU(dane[1:, 0], dane[1:, 1], dane[1:, 2], dane[0, 0], dane[0, 1], dane[0, 2])
-            np.savetxt(f"WYNIK_{transformacja}.txt", neu, delimiter=";")
+            X = lists["X"]
+            Y = lists["Y"]
+            Z = lists["Z"]
+            X0 = lists["X0"]
+            Y0 = lists["Y0"]
+            Z0 = lists["Z0"]
+            neu = self.XYZ2NEU(X,Y,Z,X0,Y0,Z0)
+            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", np.vstack(neu), delimiter=";", fmt='%0.3f %0.3f %0.3f')
         elif transformacja == "fl22000":
-            dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
-            u2000 = self.fl22000(np.deg2rad(dane[:, 0]), np.deg2rad(dane[:, 1]))
-            np.savetxt(f"WYNIK_{transformacja}.txt", u2000, delimiter=";")
+            f = lists["f"]
+            l = lists["l"]
+            u2000 = self.fl22000(np.deg2rad(f), np.deg2rad(l))
+            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", u2000, delimiter=";", fmt='%0.3f %0.3f')
         elif transformacja == "fl21992":
-            dane = np.genfromtxt(plik, delimiter=",", skip_header=naglowek)
-            u1992 = self.fl21992(np.deg2rad(dane[:, 0]), np.deg2rad(dane[:, 1]))
-            np.savetxt(f"WYNIK_{transformacja}.txt", u1992, delimiter=";")
+            f = lists["f"]
+            l = lists["l"]
+            u1992 = self.fl21992(np.deg2rad(f), np.deg2rad(l))
+            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", u1992, delimiter=";", fmt='%0.3f %0.3f')
                 
 if __name__ == '__main__':
     parser = ArgumentParser()
@@ -272,37 +344,34 @@ if __name__ == '__main__':
     parser.add_argument('-transformacja', type=str, help='Wybierz transformacje, z ktorej chcesz skorzystac, sposrod dostepnych: XYZ2flh, flh2XYZ, XYZ2neu, GK2000, GK1992, XYZ2NEU')
     parser.add_argument('-naglowek', type=int, help='Wpisz ile linijek nagłówka w pliku z danymi należy pominąć')
     args = parser.parse_args()
-    model = {'WGS84': [6378137.000, 6356752.31424518], 'GRS80': [6378137.000, 6356752.31414036], 'KRASOWSKI': [6378245.000, 6356863.019]}
-    transformacja = {'XYZ2flh': 'XYZ2flh', 'flh2XYZ': 'flh2XYZ','XYZ2NEU': 'XYZ2NEU', 'fl22000': 'fl22000', 'fl21992': 'fl21992'}
+    
+    elipsoidy = {'WGS84': [6378137.000, 0.00669437999014], 'GRS80': [6378137.000, 0.0066943800229], 'KRASOWSKI': [6378245.000, 0.00669342162296]}
+    transf = {'XYZ2flh': 'XYZ2flh', 'flh2XYZ': 'flh2XYZ','XYZ2NEU': 'XYZ2NEU', 'fl22000': 'fl22000', 'fl21992': 'fl21992'}
     
     wybor='TAK'
 
     try:
         while wybor =="TAK":
             if args.model==None:
-                args.model = input(str('Podaj nazwe elipsoidy: '))
+                args.model = input(str('Podaj nazwę elipsoidy: '))
             if args.dane==None:
-                args.dane = input(str('Wklej sciezke do pliku txt z danymi: '))
+                args.dane = input(str('Wklej scieżkę do pliku txt z danymi: '))
             if args.transformacja==None:
-                args.transformacja = input(str('Podaj nazwę tranformacji, którą chcesz wykonać: '))
+                args.transformacja = input(str('Podaj nazwę tranformacji, której chcesz użyć: '))
             if args.naglowek==None:
-                args.model = input(str('Podaj ile linijek nagłówka chcesz pominać:  '))
-            wsp = Transformacje(model[args.model.upper()])
-            wczyt = wsp.plik(args.dane,args.transf.upper())
-            print('Plik z wynikami zostal utworzony.')
-            
-            wybor = input(str("Jezeli chcesz wykonac kolejna transformacje wpisz TAK jesli chcesz zakonczyc KONIEC: ")).upper()
-            args.model = None
-            args.dane= None
-            args.transformacja= None
-
+                args.naglowek = int(input('Podaj ile linijek nagłówka pliku z danymi należy pominąć: '))
+                
+            if args.model not in elipsoidy.keys():
+                print("Nieprawidłowa nazwa elipsoidy. Wybierz spośród: WGS84, GRS80, KRASOWSKI")
+            elif args.transformacja not in transf.keys():
+                print("Nieprawidłowa nazwa transformacji. Wybierz spośród: XYZ2flh, flh2XYZ, XYZ2NEU, fl22000, fl21992")
+            else:
+                t = Transformacje(args.model)
+                t.wczytywanie(args.dane, args.transformacja, args.naglowek)
+                wybor = input("Czy chcesz spróbować jeszcze raz? TAK/NIE: ")
+                args.model= None
+                args.dane= None
+                args.transformacja= None
+                args.naglowek= None
     except FileNotFoundError:
-        print('Podany plik nie istnieje.')
-    except KeyError:
-        print('Zle podana elipsoida lub transformacja.')
-    except IndexError:
-        print('Zly format danych w pliku.')
-    except ValueError:
-        print('Zly format danych w pliku.')
-    finally:
-        print('Koniec programu')
+        print("Plik nie został znaleziony. Upewnij się, że podałeś poprawną nazwę i ścieżkę do pliku.")
