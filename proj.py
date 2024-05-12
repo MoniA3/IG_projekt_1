@@ -97,15 +97,13 @@ class Transformacje:
             while True:
                 N = self.Np(fi)
                 X = (N + h) * np.cos(fi) * np.cos(lam)
-                Xp = X
+                
                 Y = (N + h) * np.cos(fi) * np.sin(lam)
                 Z = (N * (1 - self.e2) + h) * np.sin(fi)
-                if abs(Xp - X) < (0.000001/206265):
-                    break
+                
             XYZ.append([X, Y, Z])
         return(XYZ)
-        
-        
+       
     """Tranformacja współrzędnych geocentrycznych do współrzędnych topocentrycznych"""
      
 
