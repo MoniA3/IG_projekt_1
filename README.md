@@ -24,7 +24,7 @@ Projekt 1 - informatyka geodezyjna 2
 -FL ===> PL2000
 
 
-###Transformacje dostępne są na elipsoidach:
+### Transformacje dostępne są na elipsoidach:
 
 -GRS80
 
@@ -73,7 +73,7 @@ Projekt 1 - informatyka geodezyjna 2
     NIE program zakończy pracę a użytkownik zobaczy komunikat: 
     "Dziękujemy za skorzystanie z naszego programu."
 
-###OPIS PLIKU Z DANYMI WEJŚCIOWYMI I WYJŚCIOWYMI
+### OPIS PLIKU Z DANYMI WEJŚCIOWYMI I WYJŚCIOWYMI
 
 Przykładowy plik z danymi wejściowymi "dane_XYZ2flh.txt":
 
