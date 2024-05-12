@@ -94,13 +94,11 @@ class Transformacje:
         """
         XYZ = []
         for fi, lam, h in zip(fi, lam, h):
-            while True:
                 N = self.Np(fi)
                 X = (N + h) * np.cos(fi) * np.cos(lam)
-                
                 Y = (N + h) * np.cos(fi) * np.sin(lam)
                 Z = (N * (1 - self.e2) + h) * np.sin(fi)
-                
+
             XYZ.append([X, Y, Z])
         return(XYZ)
        
@@ -202,7 +200,7 @@ class Transformacje:
                 print("Punkt poza strefami odwzorowawczymi układu PL-2000")
                 continue
                          
-            b2 = self.a**2*(1-self.e2)    
+            b2 = (self.a**2)*(1-self.e2)    
             ep2 = (self.a**2-b2)/b2   #drugi mimosrod elipsy   #drugi mimosrod elipsy
             dlam = lam - lam0
             t = np.tan(fi)
@@ -210,9 +208,9 @@ class Transformacje:
             N = self.Np(fi)
             sigma = self.Sigma(fi)
             
-            XGK = sigma + ((dlam**2)/2) * N * np.sin(fi)*np.cos(fi) * ( 1+ ((dlam**2)/12)*(np.cos(fi))**2 * ( 5 - (t**2)+9*(n**2) + 4*(n**4)     )  + ((dlam**4)/360)*(np.cos(fi)**4) * (61-58*(t**2)+(t**4) + 270*(n**2) - 330*(n**2)*(t**2))  )
-            YGK = (dlam*N* np.cos(fi)) * (1+(((dlam)**2/6)*(np.cos(fi))**2) *(1-(t**2)+(n**2))+((dlam**4)/120)*(np.cos(fi)**4)*(5-18*(t**2)+(t**4)+14*(n**2)-58*(n**2)*(t**2)) )
-                         
+            XGK =  sigma    +    ( ((dlam**2/2)*N*np.sin(fi)*np.cos(fi))    *    (1   +   ((dlam**2/12)*(np.cos(fi)**2)*(5 - t**2 + 9*n**2 + 4*n**4))      +         ((dlam**4/360)*(np.cos(fi)**4)*(61 - 58*t**2 + t**4 + 270*n**2 - 330*n**2*t**2))))
+            YGK =  (dlam* N * np.cos(fi))  *   ( 1 +  ((dlam**2/6)   *   (np.cos(fi)**2)   *  (1 - t**2 + n**2))     +     (((dlam**4/120)*(np.cos(fi)**4)) * (5 - (18*t**2) + t**4 + (14 * n**2) - (58*n**2*t**2))))
+            
             X2000 = XGK * m0
             Y2000 = YGK * m0 + strefa*1000000 + 500000
             wsp2000.append([X2000, Y2000])
@@ -236,21 +234,21 @@ class Transformacje:
         współrzedne geocentryczne punktu w układzie PL-1992 [m]
         X Y 
         """
-        lam0 = (19 * np.pi)/180
+        lam0 = np.deg2rad(19)
         m0 = 0.9993
         wsp1992 = []
         for fi,lam in zip(fi,lam):
             b2 = self.a**2*(1-self.e2)    
-            ep2 = (self.a**2-b2)/b2   #drugi mimosrod elipsy   #drugi mimosrod elipsy
+            ep2 = (self.a**2-b2)/b2   #drugi mimosrod elipsy
             dlam = lam - lam0
             t = np.tan(fi)
             n = np.sqrt(ep2 * (np.cos(fi))**2)
             N = self.Np(fi)
             sigma = self.Sigma(fi)
                 
-            XGK = sigma + ((dlam**2)/2)*N*np.sin(fi)*np.cos(fi) * ( 1+ ((dlam**2)/12)*(np.cos(fi))**2 * ( 5 - (t**2)+9*(n**2) + 4*(n**4) ) + ((dlam**4)/360)*(np.cos(fi)**4) * (61-58*(t**2)+(t**4) + 270*(n**2) - 330*(n**2)*(t**2))  )
-            YGK = (dlam*N* np.cos(fi)) * (1+(((dlam)**2/6)*(np.cos(fi))**2) *(1-(t**2)+(n**2))+((dlam**4)/120)*(np.cos(fi)**4)*(5-18*(t**2)+(t**4)+14*(n**2)-58*(n**2)*(t**2)) )
-                            
+            XGK =  sigma    +    ( ((dlam**2/2)*N*np.sin(fi)*np.cos(fi))    *    (1   +   ((dlam**2/12)*(np.cos(fi)**2)*(5 - t**2 + 9*n**2 + 4*n**4))      +         ((dlam**4/360)*(np.cos(fi)**4)*(61 - 58*t**2 + t**4 + 270*n**2 - 330*n**2*t**2))))
+            YGK =  (dlam* N * np.cos(fi))  *   ( 1 +  ((dlam**2/6)   *   (np.cos(fi)**2)   *  (1 - t**2 + n**2))     +     (((dlam**4/120)*(np.cos(fi)**4)) * (5 - (18*t**2) + t**4 + (14 * n**2) - (58*n**2*t**2))))
+        
             X1992 = XGK * m0 - 5300000
             Y1992 = YGK * m0 + 500000
             wsp1992.append([X1992, Y1992]) 
