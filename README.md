@@ -71,3 +71,45 @@ PRZYKŁADOWE WYWOŁANIE ZA POMOCĄ WIERSZA POLECEŃ
     gdzie po wpisaniu TAK możemy ponownie wpisywać flagi jak w podpunkcie 3 aby wykonać inną transformację, a po wpisaniu 
     NIE program zakończy pracę a użytkownik zobaczy komunikat: 
     "Dziękujemy za skorzystanie z naszego programu."
+
+OPIS PLIKU Z DANYMI WEJŚCIOWYMI I WYJŚCIOWYMI
+
+Przykładowy plik z danymi wejściowymi "dane_XYZ2flh.txt":
+
+Współrzedne geocentryczny ECEF stacji pemanentnej GNSS
+Obserwatorium Astronomiczno-Geodezyjne w Józefosławiu
+  X[m]         Y[m]        Z[m]
+# -----------------------------------------------------
+3664940.500,1409153.590,5009571.170
+3664940.510,1409153.580,5009571.167
+3664940.520,1409153.570,5009571.167
+3664940.530,1409153.560,5009571.168
+3664940.520,1409153.590,5009571.170
+3664940.514,1409153.584,5009571.166
+3664940.525,1409153.575,5009571.166
+3664940.533,1409153.564,5009571.169
+3664940.515,1409153.590,5009571.170
+3664940.514,1409153.584,5009571.169
+3664940.515,1409153.595,5009571.169
+3664940.513,1409153.584,5009571.171
+
+Ma on 4 linijki nagłówka, które można ominąc, gdy użytkownik wpisze "4" po fladze "Podaj ile linijek nagłówka pliku z danymi należy pominąć:"
+Jak widać dane są oddzielone przecinkami i tylko w takim formacie program je poprawnie pobierze.
+
+Przykładowy plik z danymi wyjściowymi "Wynik_XYZ2flh_GRS80.txt":
+
+52.09727 21.03153 141.39866
+52.09727 21.03153 141.39982
+52.09727 21.03153 141.40335
+52.09727 21.03153 141.40767
+52.09727 21.03153 141.41013
+52.09727 21.03153 141.40221
+52.09727 21.03153 141.40653
+52.09727 21.03153 141.41106
+52.09727 21.03153 141.40726
+52.09727 21.03153 141.40458
+52.09727 21.03153 141.40758
+52.09727 21.03153 141.40558
+
+Dane po tej transformacji wyglądają następująco: są oddzielone spacją odpowiednio w kolejności szerokość geodezyjna, długość geodezyjna (obie w stopniach) i wysokość (w metrach).
+
