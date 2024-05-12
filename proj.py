@@ -99,7 +99,7 @@ class Transformacje:
                 Y = (N + h) * np.cos(fi) * np.sin(lam)
                 Z = (N * (1 - self.e2) + h) * np.sin(fi)
 
-            XYZ.append([X, Y, Z])
+        XYZ.append([X, Y, Z])
         return(XYZ)
        
     """Tranformacja współrzędnych geocentrycznych do współrzędnych topocentrycznych"""
@@ -258,8 +258,6 @@ class Transformacje:
     """wczytywanie danych oraz funckcji z pliku """
         
     def wczytywanie(self, plik, transformacja, naglowek):
-        print("Próba otwarcia pliku:", plik)
-        print("Linie nagłówka do pominięcia:", naglowek)
         with open(plik, 'r') as file:
             lines = file.readlines()
             lines = lines[naglowek:]
@@ -299,7 +297,7 @@ class Transformacje:
                         lists["f"].append(float(parts[0]))
                         lists["l"].append(float(parts[1]))
                         lists["h"].append(float(parts[2]))
-            print("Przetworzone dane:", lists)   
+ 
             
         if transformacja == "XYZ2flh":
             X = lists["X"]
@@ -357,6 +355,8 @@ if __name__ == '__main__':
             if args.naglowek==None:
                 args.naglowek = int(input('Podaj ile linijek nagłówka pliku z danymi należy pominąć: '))
                 
+            print('Plik z wynikami został utworzony')
+            
             if args.model not in elipsoidy.keys():
                 print("Nieprawidłowa nazwa elipsoidy. Wybierz spośród: WGS84, GRS80, KRASOWSKI")
             elif args.transformacja not in transf.keys():
@@ -372,5 +372,8 @@ if __name__ == '__main__':
     except FileNotFoundError:
 
         print("Plik nie został znaleziony. Upewnij się, że podałeś poprawną nazwę i ścieżkę do pliku.")
+    
+    finally:
+       print('Dziękujemy za skorzystanie z naszego programu.')
 
         
