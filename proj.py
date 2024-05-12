@@ -123,24 +123,25 @@ class Transformacje:
         X Y Z
         
         """
-        R_neu = np.array([[-np.sin(fi)*np.cos(lam), -np.sin(lam), np.cos(fi)*np.cos(lam)],
-                          [-np.sin(fi)*np.sin(lam), np.cos(lam), np.cos(fi)*np.sin(lam)],
-                          [np.cos(fi), 0, np.sin(fi)]])
+
         wynik = []
         for X0, Y0, Z0 in zip(X0, Y0, Z0):
             lam = np.arctan2(Y0, X0)
-            fi = np.arctan(Z0 / (r * (1 - self.e2)))
             r = np.sqrt(X0**2+Y0**2)
-        # fi, lam, _ = [radians(coord) for coord in self.XYZ2flh(X0, Y0, Z0)]
+            fi = np.arctan(Z0 / (r * (1 - self.e2)))
 
-    
             while True:
-                N = self.Np(f)
-                h = (r/np.cos(f))-N
+                N = self.Np(fi)
+                h = (r/np.cos(fi))-N
                 fp = fi
                 fi = np.arctan(Z0/(r*(1-self.e2 * N/(N+h))))
-                if abs(fp-f)<(0.000001/206265):
+                if abs(fp-fi)<(0.000001/206265):
                     break
+                
+            
+        R_neu = np.array([[-np.sin(fi)*np.cos(lam), -np.sin(lam), np.cos(fi)*np.cos(lam)],
+                         [-np.sin(fi)*np.sin(lam), np.cos(lam), np.cos(fi)*np.sin(lam)],
+                         [np.cos(fi), 0, np.sin(fi)]])
                 
         X_list = []
         Y_list = []
@@ -150,18 +151,18 @@ class Transformacje:
             Y_list.append(Y)
             Z_list.append(Z)
 
-        X_list = array(X_list)
-        Y_list = array(Y_list)
-        Z_list = array(Z_list)
+        X_list = np.array(X_list)
+        Y_list = np.array(Y_list)
+        Z_list = np.array(Z_list)
 
-        xyz = column_stack([reshape(X_list, (len(X_list), 1)), reshape(
-            Y_list, (len(Y_list), 1)), reshape(Z_list, (len(Z_list), 1))])
+        xyz = np.column_stack([np.reshape(X_list, (len(X_list), 1)), np.reshape(
+            Y_list, (len(Y_list), 1)), np.reshape(Z_list, (len(Z_list), 1))])
 
-        xyz0 = array([X0, Y0, Z0]).T
+        xyz0 = np.array([X0, Y0, Z0]).T
 
         xyzt = xyz-xyz0
 
-        neu = R.T @ xyzt.T
+        neu = R_neu.T @ xyzt.T
         wynik.append(neu.T)        
 
         return wynik
@@ -314,7 +315,7 @@ class Transformacje:
             f = lists["f"]
             l = lists["l"]
             h = lists["h"]
-            xyz = self.flh2XYZ(np.deg2rad(f,l,h))
+            xyz = self.flh2XYZ(np.deg2rad(f), np.deg2rad(l),h)
             np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", xyz, delimiter=";", fmt='%0.3f %0.3f %0.3f')
         elif transformacja == "XYZ2NEU":
             X = lists["X"]
@@ -324,7 +325,7 @@ class Transformacje:
             Y0 = lists["Y0"]
             Z0 = lists["Z0"]
             neu = self.XYZ2NEU(X,Y,Z,X0,Y0,Z0)
-            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", neu, delimiter=";", fmt='%0.3f %0.3f %0.3f')
+            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", np.vstack(neu), delimiter=";", fmt='%0.3f %0.3f %0.3f')
         elif transformacja == "fl22000":
             f = lists["f"]
             l = lists["l"]
