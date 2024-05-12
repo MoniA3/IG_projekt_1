@@ -13,30 +13,24 @@ Projekt 1 - informatyka geodezyjna 2
 
 ### Transformacje zawarte w projekcie:
  
--XYZ ===> FLH
-
--FLH ===> XYZ
-
--XYZ ===> NEU
-
--FL ===> PL1992
-
--FL ===> PL2000
+- XYZ ===> FLH
+- FLH ===> XYZ
+- XYZ ===> NE
+- FL ===> PL1992
+- FL ===> PL2000
 
 
 ### Transformacje dostępne są na elipsoidach:
 
--GRS80
-
--WGS84
-
--KRASOWSKIEGO
+- GRS80
+- WGS84
+- KRASOWSKIEGO
 
 
 ### Opis działania programu:
 
 1. Program wymaga podania przez użytkownika danych, na podstawie kolejnych flag
-<<<<<<<
+
 - nazwę elipsoidy odniesienia (z wypisanych powyżej)
 - ścieżkę do pliku z danymi do transformacji (np. C:\Users\Asus\Documents\2 rok\IV sem\Infa II\plik_dane_flh2XYZ.txt)
   UWAGA! dane w pliku muszą być oddzielone od siebie przecinkami odpowiednio 
