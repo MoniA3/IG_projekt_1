@@ -66,7 +66,8 @@ Projekt 1 - informatyka geodezyjna 2
 ### OPIS PLIKU Z DANYMI WEJŚCIOWYMI I WYJŚCIOWYMI
 
 - Tranformacja XYZ2flh
-  Przykładowy plik z danymi wejściowymi "dane_XYZ2flh.txt":
+
+Przykładowy plik z danymi wejściowymi "dane_XYZ2flh.txt":
 
 ```
 Współrzedne geocentryczny ECEF stacji pemanentnej GNSS
