@@ -139,6 +139,7 @@ Przykładowy plik z danymi wyjściowymi "Wynik_XYZ2flh_GRS80.txt":
 Niestety plik z wynikami pokazuje nam tylko wynik pierwszej linijki, jest to błąd, którego nie udało nam się rozwiązać
 
 - Transformacja XYZ2NEU
+
 Przykładowy plik z danymi wejściowymi "dane_XYZ2NEU.txt":
 
 ```
@@ -162,6 +163,7 @@ Przykładowy plik z danymi wyjściowymi "Wynik_XYZ2NEU_GRS80.txt":
 ```
 
 - Transformacja fl22000
+
 Przykładowy plik z danymi wejściowymi "dane_2000_92.txt":
 
 ```
