@@ -304,7 +304,7 @@ class Transformacje:
             Y = lists["Y"]
             Z = lists["Z"]
             flh = self.XYZ2flh(X,Y,Z)
-            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", flh, delimiter=";", fmt='%0.3f %0.3f %0.3f')
+            np.savetxt(f"Wynik_{transformacja}_{args.model}.txt", flh, delimiter=";", fmt='%0.5f %0.5f %0.3f')
         elif transformacja == "flh2XYZ":
             f = lists["f"]
             l = lists["l"]
