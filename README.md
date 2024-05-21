@@ -110,7 +110,8 @@ Przykładowy plik z danymi wyjściowymi "Wynik_XYZ2flh_GRS80.txt":
 Dane po tej transformacji wyglądają następująco: są oddzielone spacją odpowiednio w kolejności szerokość geodezyjna, długość geodezyjna (obie w stopniach) i wysokość (w metrach).
 
 - Tranformacja flh2XYZ
-  Przykładowy plik z danymi wejściowymi "dane_flh2XYZ.txt":
+
+Przykładowy plik z danymi wejściowymi "dane_flh2XYZ.txt":
 
 ```
   Współrzędne elipsoidalne fi, lambda, h
@@ -138,7 +139,7 @@ Przykładowy plik z danymi wyjściowymi "Wynik_XYZ2flh_GRS80.txt":
 Niestety plik z wynikami pokazuje nam tylko wynik pierwszej linijki, jest to błąd, którego nie udało nam się rozwiązać
 
 - Transformacja XYZ2NEU
- Przykładowy plik z danymi wejściowymi "dane_XYZ2NEU.txt":
+Przykładowy plik z danymi wejściowymi "dane_XYZ2NEU.txt":
 
 ```
 3673602.0707659787,1410163.7139986877,5002803.345368741
@@ -161,7 +162,7 @@ Przykładowy plik z danymi wyjściowymi "Wynik_XYZ2NEU_GRS80.txt":
 ```
 
 - Transformacja fl22000
- Przykładowy plik z danymi wejściowymi "dane_2000_92.txt":
+Przykładowy plik z danymi wejściowymi "dane_2000_92.txt":
 
 ```
 52.2297,21.0122
@@ -184,7 +185,7 @@ Przykładowy plik z danymi wyjściowymi "Wynik_fl22000_GRS80.txt":
 Wynikami są współrzędne X[m] i Y[m] w układzie PL-2000
 
 - Transformacja fl21992
- Przykładowy plik z danymi wejściowymi "dane_2000_92.txt":
+Przykładowy plik z danymi wejściowymi "dane_2000_92.txt":
 
 ```
 52.2297,21.0122
