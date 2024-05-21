@@ -112,7 +112,7 @@ Dane po tej transformacji wyglądają następująco: są oddzielone spacją odpo
 - Tranformacja flh2XYZ
   Przykładowy plik z danymi wejściowymi "dane_flh2XYZ.txt":
 
-  ```
+```
   Współrzędne elipsoidalne fi, lambda, h
 52.2297,21.0122,78.000
 52.1298,21.0123,78.100
