@@ -21,6 +21,7 @@ Projekt 1 - informatyka geodezyjna 2
 
 - GRS80
 - WGS84
+- Krasowski
 
 
 ### Opis działania programu:
@@ -209,5 +210,7 @@ Przykładowy plik z danymi wyjściowymi "Wynik_fl21992_GRS80.txt":
 ```
 Wynikami są współrzędne X[m] i Y[m] w układzie PL-1992
 
-Mimo obecności w kodzie parametrów elipsoidy Krasowskiego, nie udało nam się zimplementować poprawnych transformacji, które biorą pod uwagę tą elipsoidę.
+
+### Błędy
+- Mimo obecności w kodzie parametrów elipsoidy Krasowskiego, program zwraca błędne wyniki przy tansformacji fl22000 oraz fl21992.
 
