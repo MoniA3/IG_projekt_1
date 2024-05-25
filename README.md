@@ -213,4 +213,5 @@ Wynikami są współrzędne X[m] i Y[m] w układzie PL-1992
 
 ### Błędy
 - Mimo obecności w kodzie parametrów elipsoidy Krasowskiego, program zwraca błędne wyniki przy tansformacji fl22000 oraz fl21992.
+- Transformacja flh2XYZ zwraca tylko jedną linijkę wyniku.
 
